@@ -1,0 +1,508 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+  color: var(--bs-secondary-color);
+  text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+  text-align: start;
+}
+
+/* Hero Slider Styling */
+.carousel {
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.hero-slide {
+  min-height: 75vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-slide::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.hero-slide .container {
+  position: relative;
+  z-index: 2;
+}
+
+.min-vh-75 {
+  min-height: 75vh;
+}
+
+.hero-image {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Carousel Controls */
+.carousel-control-prev,
+.carousel-control-next {
+  width: 5%;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+  opacity: 1;
+}
+
+.carousel-indicators {
+  bottom: 30px;
+}
+
+.carousel-indicators button {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin: 0 5px;
+  transition: all 0.3s ease;
+}
+
+.carousel-indicators button.active {
+  background-color: #fff;
+  transform: scale(1.2);
+}
+
+/* Animation Classes */
+.animate-slide-in {
+  animation: slideInLeft 1s ease-out;
+}
+
+.animate-slide-in-delay {
+  animation: slideInLeft 1s ease-out 0.3s both;
+}
+
+.animate-slide-in-delay-2 {
+  animation: slideInLeft 1s ease-out 0.6s both;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+/* Vehicle Cards Styling */
+.vehicle-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.vehicle-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.vehicle-card:hover::before {
+  left: 100%;
+}
+
+.vehicle-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2) !important;
+}
+
+.vehicle-card .card-body {
+  padding: 2rem 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.vehicle-card:hover .card-body {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.vehicle-card i {
+  transition: transform 0.3s ease;
+}
+
+.vehicle-card:hover i {
+  transform: scale(1.2) rotate(5deg);
+}
+
+.vehicle-details {
+  transition: all 0.3s ease;
+}
+
+/* Feature Cards */
+.feature-card {
+  transition: all 0.3s ease;
+  border: none;
+  border-radius: 15px;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+}
+
+.feature-card i {
+  transition: transform 0.3s ease;
+}
+
+.feature-card:hover i {
+  transform: scale(1.1);
+}
+
+/* Stats Section */
+.stat-card {
+  padding: 2rem 1rem;
+  border-radius: 15px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.counter {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #007bff;
+  transition: all 0.3s ease;
+}
+
+/* Contact Cards */
+.contact-card {
+  padding: 1.5rem;
+  border-radius: 10px;
+  background: white;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.contact-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Navigation Dropdown Styling */
+.dropdown-menu {
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  animation: fadeInDown 0.3s ease;
+}
+
+.dropdown-item {
+  padding: 0.75rem 1.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #f8f9fa;
+  transform: translateX(5px);
+}
+
+.dropdown-item i {
+  margin-right: 0.5rem;
+  width: 16px;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Loading Animation */
+.loading {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease;
+}
+
+.loading.loaded {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .hero-slide {
+    min-height: 60vh;
+  }
+  
+  .hero-slide h1 {
+    font-size: 2rem;
+  }
+  
+  .vehicle-card .card-body {
+    padding: 1.5rem 1rem;
+  }
+  
+  .stat-card {
+    padding: 1.5rem 1rem;
+  }
+  
+  .counter {
+    font-size: 2rem;
+  }
+}
+
+/* Button Hover Effects */
+.btn {
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Card Hover Effects */
+.card {
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Enhanced Modern Navbar Button Styles */
+.navbar .nav-btn {
+  border-radius: 2rem;
+  padding: 0.5rem 1.25rem;
+  margin: 0 0.25rem;
+  font-weight: 600;
+  background: rgba(255,255,255,0.08);
+  color: #fff !important;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.25s, color 0.25s, box-shadow 0.25s;
+  z-index: 1;
+}
+
+.navbar .nav-btn::after {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 50%;
+  bottom: 0.3rem;
+  width: 0;
+  height: 3px;
+  background: #fff;
+  border-radius: 2px;
+  transition: width 0.3s cubic-bezier(.4,0,.2,1), left 0.3s cubic-bezier(.4,0,.2,1);
+  z-index: 2;
+}
+
+.navbar .nav-btn:hover, .navbar .nav-btn:focus {
+  background: #fff;
+  color: #0d6efd !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+  text-decoration: none;
+}
+
+.navbar .nav-btn:hover::after, .navbar .nav-btn:focus::after, .navbar .nav-btn.active::after, .navbar .nav-btn[aria-current="page"]::after {
+  width: 70%;
+  left: 15%;
+  background: #0d6efd;
+}
+
+.navbar .nav-btn.active, .navbar .nav-btn[aria-current="page"] {
+  background: #fff;
+  color: #0d6efd !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+}
+
+.navbar .nav-btn i {
+  margin-right: 0.5rem;
+  transition: color 0.2s;
+}
+
+/* Footer Section Styles */
+.footer-section {
+  background: linear-gradient(135deg, #111 0%, #222 100%);
+  color: #fff;
+  border-top: none;
+  box-shadow: 0 -2px 24px rgba(0,0,0,0.18);
+  position: relative;
+  overflow: hidden;
+}
+.footer-section::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 100%;
+  height: 120px;
+  background: url('data:image/svg+xml;utf8,<svg width="100%25" height="100%25" viewBox="0 0 1440 320" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill="%23fff" fill-opacity="0.18" d="M0,160L60,170.7C120,181,240,203,360,197.3C480,192,600,160,720,133.3C840,107,960,85,1080,101.3C1200,117,1320,171,1380,197.3L1440,224L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>');
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.4s;
+}
+.footer-section > .container, .footer-section hr, .footer-section .row {
+  position: relative;
+  z-index: 1;
+}
+.footer-section h5, .footer-section h6 {
+  color: #ffe082;
+  font-weight: 700;
+}
+.footer-section .footer-link {
+  color: #fff;
+}
+.footer-section .footer-link:hover, .footer-section .footer-link:focus {
+  color: #ffe082;
+}
+.footer-section .copyright-text, .footer-section small.text-muted {
+  color: #ffe082 !important;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.footer-section .footer-link:hover, .footer-section .footer-link:focus {
+  color: #ffe082;
+}
+.footer-section .about-description, .footer-section p.small.text-muted {
+  color: #ffe082;
+  font-weight: 500;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.18);
+  letter-spacing: 0.01em;
+}
+.footer-section .footer-link:hover, .footer-section .footer-link:focus {
+  color: #ffe082;
+}
+.footer-social {
+  color: #0d6efd;
+  background: #fff;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+.footer-social:hover, .footer-social:focus {
+  background: #ffe082;
+  color: #6f42c1;
+  transform: translateY(-3px) scale(1.1);
+  text-decoration: none;
+}
+.footer-section ul {
+  padding-left: 0;
+  list-style: none;
+}
+.footer-section li {
+  margin-bottom: 0.5rem;
+  font-size: 0.97rem;
+}
+.footer-section .bi {
+  vertical-align: middle;
+}
+
+/* Footer Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in {
+  opacity: 0;
+  animation: fadeInUp 0.8s forwards;
+}
+.footer-section .animate-fade-in {
+  animation-delay: 0.2s;
+}

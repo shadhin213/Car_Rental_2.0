@@ -1,0 +1,584 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<style>
+    .vehicle-card {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    
+    .vehicle-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    
+    .vehicle-card .card-img-top {
+        padding: 0 !important;
+        overflow: hidden;
+    }
+    
+    .vehicle-card img {
+        height: 200px;
+        object-fit: cover;
+        width: 100%;
+        border-radius: 8px 8px 0 0;
+    }
+    
+    /* Filter indicator styling */
+    .filter-indicator {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 25px;
+        padding: 0.75rem 1.5rem;
+        color: white;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .filter-indicator .btn-outline-light {
+        border-radius: 20px;
+        border: 2px solid white;
+        transition: all 0.3s ease;
+    }
+    
+    .filter-indicator .btn-outline-light:hover {
+        background: white;
+        color: #667eea;
+        transform: translateY(-2px);
+    }
+    
+    /* Vehicle type specific styling */
+    .vehicle-type-motor-bike .vehicle-card {
+        border-left: 4px solid #6f42c1;
+    }
+    
+    .vehicle-type-cng .vehicle-card {
+        border-left: 4px solid #28a745;
+    }
+    
+    .vehicle-type-private-car .vehicle-card {
+        border-left: 4px solid #007bff;
+    }
+    
+    .vehicle-type-pickup .vehicle-card {
+        border-left: 4px solid #ffc107;
+    }
+    
+    .vehicle-type-truck .vehicle-card {
+        border-left: 4px solid #fd7e14;
+    }
+    
+    .vehicle-type-covered-van .vehicle-card {
+        border-left: 4px solid #dc3545;
+    }
+</style>
+
+<!-- Hero Slider Section -->
+<div id="heroSlider" class="carousel slide mb-5" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#heroSlider" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#heroSlider" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#heroSlider" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+<div class="hero-slide" style="background-image: url('https://res.cloudinary.com/dfdzjbnye/image/upload/v1753870907/car-1281698_960_720_b9cbrz.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+                <div class="container">
+                    <div class="row align-items-center min-vh-75">
+                        <div class="col-lg-6 text-white">
+                            <h1 class="display-4 fw-bold mb-4 animate-slide-in">
+                                <i class="bi bi-car-front"></i> Premium Car Rental
+                            </h1>
+                            <p class="lead mb-4 animate-slide-in-delay">
+                                Experience luxury and comfort with our premium vehicle collection. 
+                                From sports cars to luxury sedans, we have it all.
+                            </p>
+                            <div class="animate-slide-in-delay-2">
+                                @if (Context.Session.GetString("UserId") != null)
+                                {
+                                    <a asp-controller="Home" asp-action="Dashboard" class="btn btn-light btn-lg me-3">
+                                        <i class="bi bi-speedometer2"></i> Go to Dashboard
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a asp-controller="Account" asp-action="Register" class="btn btn-light btn-lg me-3">
+                                        <i class="bi bi-person-plus"></i> Get Started
+                                    </a>
+                                }
+                                <a asp-controller="Home" asp-action="VehicleTypes" class="btn btn-outline-light btn-lg">
+                                    <i class="bi bi-arrow-down"></i> Explore Vehicles
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 text-center">
+                            <div class="hero-image animate-float">
+                                <i class="bi bi-car-front-fill text-white" style="font-size: 15rem; opacity: 0.3;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="hero-slide" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                <div class="container">
+                    <div class="row align-items-center min-vh-75">
+                        <div class="col-lg-6 text-white">
+                            <h1 class="display-4 fw-bold mb-4 animate-slide-in">
+                                <i class="bi bi-truck"></i> Commercial Solutions
+                            </h1>
+                            <p class="lead mb-4 animate-slide-in-delay">
+                                Professional fleet management for businesses. 
+                                Trucks, vans, and commercial vehicles for all your business needs.
+                            </p>
+                            <div class="animate-slide-in-delay-2">
+                                <a asp-controller="Home" asp-action="VehicleTypes" class="btn btn-light btn-lg me-3">
+                                    <i class="bi bi-building"></i> Business Solutions
+                                </a>
+                                <a href="#features" class="btn btn-outline-light btn-lg">
+                                    <i class="bi bi-info-circle"></i> Learn More
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 text-center">
+                            <div class="hero-image animate-float">
+                                <i class="bi bi-truck text-white" style="font-size: 15rem; opacity: 0.3;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="hero-slide" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                <div class="container">
+                    <div class="row align-items-center min-vh-75">
+                        <div class="col-lg-6 text-white">
+                            <h1 class="display-4 fw-bold mb-4 animate-slide-in">
+                                <i class="bi bi-shield-check"></i> Safe & Reliable
+                            </h1>
+                            <p class="lead mb-4 animate-slide-in-delay">
+                                Your safety is our priority. All vehicles are regularly maintained 
+                                and inspected for your peace of mind.
+                            </p>
+                            <div class="animate-slide-in-delay-2">
+                                <a href="#features" class="btn btn-light btn-lg me-3">
+                                    <i class="bi bi-shield-check"></i> Safety Features
+                                </a>
+                                <a href="#contact" class="btn btn-outline-light btn-lg">
+                                    <i class="bi bi-telephone"></i> Contact Us
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 text-center">
+                            <div class="hero-image animate-float">
+                                <i class="bi bi-shield-check text-white" style="font-size: 15rem; opacity: 0.3;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroSlider" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#heroSlider" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+<!-- Featured Vehicles Section -->
+<div class="container mb-5">
+    @if (!string.IsNullOrEmpty(ViewBag.SelectedVehicleType))
+    {
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb justify-content-center">
+                <li class="breadcrumb-item">
+                    <a href="@Url.Action("Index", "Home")" class="text-decoration-none">
+                        <i class="bi bi-house"></i> Home
+                    </a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#" class="text-decoration-none">
+                        <i class="bi bi-truck"></i> Vehicle Types
+                    </a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    <i class="bi bi-funnel"></i> @ViewBag.SelectedVehicleType
+                </li>
+            </ol>
+        </nav>
+    }
+    
+    <h2 class="text-center mb-5">
+        <i class="bi bi-car-front text-primary"></i> 
+        @if (!string.IsNullOrEmpty(ViewBag.SelectedVehicleType))
+        {
+            <span>@ViewBag.SelectedVehicleType.ToUpper() Vehicles</span>
+        }
+        else
+        {
+            <span>Featured Vehicles</span>
+        }
+    </h2>
+    
+    @if (!string.IsNullOrEmpty(ViewBag.SelectedVehicleType))
+    {
+        <div class="text-center mb-4">
+            <div class="alert filter-indicator d-inline-block">
+                <i class="bi bi-funnel"></i> 
+                Showing vehicles filtered by: <strong>@ViewBag.SelectedVehicleType</strong>
+                <a href="@Url.Action("Index", "Home")" class="btn btn-sm btn-outline-light ms-3">
+                    <i class="bi bi-x-circle"></i> Clear Filter
+                </a>
+            </div>
+        </div>
+    }
+    
+    <div class="row g-4 @if (!string.IsNullOrEmpty(ViewBag.SelectedVehicleType)) { <text>vehicle-type-@ViewBag.SelectedVehicleType.ToLower().Replace(" ", "-")</text> }">
+        @{
+            var featuredVehicles = ViewBag.FeaturedVehicles as List<CarRentalManagementSystem.Models.VehicleViewModel> ?? new List<CarRentalManagementSystem.Models.VehicleViewModel>();
+        }
+        
+        @if (featuredVehicles.Any())
+        {
+            @foreach (var vehicle in featuredVehicles.Take(6))
+            {
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 shadow-sm vehicle-card">
+                        <div class="card-img-top bg-light text-center p-4 position-relative">
+                            @if (!string.IsNullOrEmpty(vehicle.ImageUrl))
+                            {
+                                <img src="@vehicle.ImageUrl" alt="@vehicle.Model" class="img-fluid" style="max-height: 200px; object-fit: cover;">
+                            }
+                            else
+                            {
+                                @switch (vehicle.VehicleType.ToLower())
+                                {
+                                    case "motor bike":
+                                        <i class="bi bi-bicycle" style="font-size: 4rem; color: #6f42c1;"></i>
+                                        break;
+                                    case "cng":
+                                        <i class="bi bi-fuel-pump" style="font-size: 4rem; color: #28a745;"></i>
+                                        break;
+                                    case "private car":
+                                        <i class="bi bi-car-front" style="font-size: 4rem; color: #007bff;"></i>
+                                        break;
+                                    case "pickup":
+                                        <i class="bi bi-truck" style="font-size: 4rem; color: #ffc107;"></i>
+                                        break;
+                                    case "truck":
+                                        <i class="bi bi-truck" style="font-size: 4rem; color: #fd7e14;"></i>
+                                        break;
+                                    case "covered van":
+                                        <i class="bi bi-van" style="font-size: 4rem; color: #dc3545;"></i>
+                                        break;
+                                    default:
+                                        <i class="bi bi-car-front" style="font-size: 4rem; color: #6c757d;"></i>
+                                        break;
+                                }
+                            }
+                            <span class="badge @(vehicle.Status == "Available" ? "bg-success" : "bg-warning") position-absolute top-0 end-0 m-2">
+                                @vehicle.Status
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">@vehicle.Model</h5>
+                            <p class="card-text text-muted">
+                                @vehicle.VehicleType • @vehicle.Year • @vehicle.FuelType
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-primary fw-bold">$@vehicle.DailyRate/day</span>
+                                <small class="text-muted">@vehicle.EngineCapacity</small>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <a href="@Url.Action("AvailableCars", "Home")" class="btn btn-primary w-100">
+                                <i class="bi bi-calendar-plus"></i> Rent Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12 text-center">
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i> 
+                    @if (!string.IsNullOrEmpty(ViewBag.SelectedVehicleType))
+                    {
+                        <span>No @ViewBag.SelectedVehicleType vehicles available at the moment. Please check back later or try a different vehicle type.</span>
+                    }
+                    else
+                    {
+                        <span>No vehicles available at the moment. Please check back later.</span>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+    
+    @if (featuredVehicles.Any())
+    {
+        <div class="text-center mt-4">
+            <a href="@Url.Action("AvailableCars", "Home")" class="btn btn-outline-primary btn-lg">
+                <i class="bi bi-car-front"></i> 
+                @if (!string.IsNullOrEmpty(ViewBag.SelectedVehicleType))
+                {
+                    <span>View All @ViewBag.SelectedVehicleType Vehicles</span>
+                }
+                else
+                {
+                    <span>View All Vehicles</span>
+                }
+            </a>
+        </div>
+    }
+</div>
+
+<!-- Features Section -->
+<div id="features" class="container mb-5">
+    <h2 class="text-center mb-5">
+        <i class="bi bi-star text-warning"></i> Why Choose Us
+    </h2>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card text-center h-100 shadow-sm feature-card">
+                <div class="card-body">
+                    <i class="bi bi-car-front fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">Wide Vehicle Selection</h5>
+                    <p class="card-text">Choose from motorcycles, cars, buses, trucks, and more to suit your specific needs.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center h-100 shadow-sm feature-card">
+                <div class="card-body">
+                    <i class="bi bi-shield-check fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">Secure Booking</h5>
+                    <p class="card-text">Safe and secure booking process with instant confirmation and transparent pricing.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center h-100 shadow-sm feature-card">
+                <div class="card-body">
+                    <i class="bi bi-headset fa-3x text-info mb-3"></i>
+                    <h5 class="card-title">24/7 Support</h5>
+                    <p class="card-text">Round-the-clock customer support for all your rental needs and emergencies.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Interactive Stats Section -->
+<div class="container mb-5">
+    <div class="row text-center">
+        <div class="col-md-3 col-sm-6 mb-4">
+            <div class="stat-card">
+                <i class="bi bi-car-front-fill fa-3x text-primary mb-3"></i>
+                <h3 class="counter" data-target="@(featuredVehicles.Count > 0 ? featuredVehicles.Count : 0)">0</h3>
+                <p class="text-muted">
+                    @if (!string.IsNullOrEmpty(ViewBag.SelectedVehicleType))
+                    {
+                        <span>@ViewBag.SelectedVehicleType Vehicles</span>
+                    }
+                    else
+                    {
+                        <span>Vehicles Available</span>
+                    }
+                </p>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-4">
+            <div class="stat-card">
+                <i class="bi bi-people-fill fa-3x text-success mb-3"></i>
+                <h3 class="counter" data-target="10000">0</h3>
+                <p class="text-muted">Happy Customers</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-4">
+            <div class="stat-card">
+                <i class="bi bi-geo-alt-fill fa-3x text-info mb-3"></i>
+                <h3 class="counter" data-target="50">0</h3>
+                <p class="text-muted">Cities Covered</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-4">
+            <div class="stat-card">
+                <i class="bi bi-award-fill fa-3x text-warning mb-3"></i>
+                <h3 class="counter" data-target="15">0</h3>
+                <p class="text-muted">Years Experience</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Call to Action Section -->
+@if (Context.Session.GetString("UserId") == null)
+{
+    <div class="container mb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <div class="card bg-primary text-white shadow">
+                    <div class="card-body py-5">
+                        <h3 class="card-title mb-3">
+                            <i class="bi bi-person-plus"></i> Ready to Get Started?
+                        </h3>
+                        <p class="card-text mb-4">Join our car rental management system and start managing your vehicle rentals efficiently.</p>
+                        <div class="d-flex justify-content-center gap-3">
+                            <a asp-controller="Account" asp-action="Login" class="btn btn-light">
+                                <i class="bi bi-box-arrow-in-right"></i> Login
+                            </a>
+                            <a asp-controller="Account" asp-action="Register" class="btn btn-outline-light">
+                                <i class="bi bi-person-plus"></i> Register
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Contact Section -->
+<div id="contact" class="container mb-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto text-center">
+            <h2 class="mb-4">
+                <i class="bi bi-telephone text-primary"></i> Get In Touch
+            </h2>
+            <p class="lead mb-5">Have questions? We're here to help you find the perfect vehicle for your needs.</p>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <div class="contact-card">
+                        <i class="bi bi-telephone-fill fa-2x text-primary mb-3"></i>
+                        <h5>Call Us</h5>
+                        <p>+1 (555) 123-4567</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="contact-card">
+                        <i class="bi bi-envelope-fill fa-2x text-success mb-3"></i>
+                        <h5>Email Us</h5>
+                        <p>info@carrental.com</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="contact-card">
+                        <i class="bi bi-geo-alt-fill fa-2x text-info mb-3"></i>
+                        <h5>Visit Us</h5>
+                        <p>123 Main Street, City, State</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script>
+// Vehicle type filtering functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Get the selected vehicle type from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const selectedVehicleType = urlParams.get('vehicleType');
+    
+    if (selectedVehicleType) {
+        // Add smooth scroll to the featured vehicles section
+        const featuredSection = document.querySelector('#features').nextElementSibling;
+        if (featuredSection) {
+            setTimeout(() => {
+                featuredSection.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start' 
+                });
+            }, 500);
+        }
+        
+        // Add animation to the filter indicator
+        const filterIndicator = document.querySelector('.filter-indicator');
+        if (filterIndicator) {
+            filterIndicator.style.opacity = '0';
+            filterIndicator.style.transform = 'translateY(-20px)';
+            
+            setTimeout(() => {
+                filterIndicator.style.transition = 'all 0.5s ease';
+                filterIndicator.style.opacity = '1';
+                filterIndicator.style.transform = 'translateY(0)';
+            }, 300);
+        }
+        
+        // Add vehicle type specific animations
+        const vehicleCards = document.querySelectorAll('.vehicle-card');
+        vehicleCards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            
+            setTimeout(() => {
+                card.style.transition = 'all 0.5s ease';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 500 + (index * 100));
+        });
+    }
+    
+    // Add click event to vehicle type navigation items
+    const vehicleTypeLinks = document.querySelectorAll('.dropdown-item[href*="vehicleType"]');
+    vehicleTypeLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            // Add loading state
+            const originalText = this.innerHTML;
+            this.innerHTML = '<i class="bi bi-arrow-clockwise spin"></i> Loading...';
+            this.style.pointerEvents = 'none';
+            
+            // Navigate to the filtered page
+            setTimeout(() => {
+                window.location.href = this.href;
+            }, 300);
+        });
+    });
+    
+    // Add smooth transitions for vehicle cards
+    const allVehicleCards = document.querySelectorAll('.vehicle-card');
+    allVehicleCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-5px)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+});
+
+// Add CSS for spinning animation
+const style = document.createElement('style');
+style.textContent = `
+    .spin {
+        animation: spin 1s linear infinite;
+    }
+    
+    @@keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+    
+    .vehicle-card {
+        transition: all 0.3s ease;
+    }
+    
+    .filter-indicator {
+        transition: all 0.3s ease;
+    }
+`;
+document.head.appendChild(style);
+</script>

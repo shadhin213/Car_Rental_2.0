@@ -1,0 +1,531 @@
+@{
+    ViewData["Title"] = "Available Cars";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="page-header bg-primary text-white p-4 rounded mb-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h1 class="display-4">
+                            <i class="bi bi-car-front"></i> Fleet Overview
+                        </h1>
+                        <p class="lead">Browse our complete fleet of vehicles with their current status</p>
+                    </div>
+                    <div>
+                        <a href="@Url.Action("FleetManagement", "Home")" class="btn btn-outline-light btn-lg">
+                            <i class="bi bi-truck"></i> Fleet Management
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Message -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle"></i> @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+    }
+
+    
+
+    <!-- Filter Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0"><i class="bi bi-funnel"></i> Filter Cars</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label for="vehicleType" class="form-label">Vehicle Type</label>
+                            <select class="form-select" id="vehicleType">
+                                <option value="">All Types</option>
+                                <option value="motor-bike">Motor Bike</option>
+                                <option value="cng">CNG</option>
+                                <option value="private-car">Private Car</option>
+                                <option value="pickup">Pickup</option>
+                                <option value="truck">Truck</option>
+                                <option value="covered-van">Covered Van</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="priceRange" class="form-label">Price Range</label>
+                            <select class="form-select" id="priceRange">
+                                <option value="">All Prices</option>
+                                <option value="0-50">$0 - $50/day</option>
+                                <option value="50-100">$50 - $100/day</option>
+                                <option value="100-200">$100 - $200/day</option>
+                                <option value="200+">$200+/day</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="transmission" class="form-label">Transmission</label>
+                            <select class="form-select" id="transmission">
+                                <option value="">All</option>
+                                <option value="automatic">Automatic</option>
+                                <option value="manual">Manual</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="fuelType" class="form-label">Fuel Type</label>
+                            <select class="form-select" id="fuelType">
+                                <option value="">All</option>
+                                <option value="petrol">Petrol</option>
+                                <option value="diesel">Diesel</option>
+                                <option value="electric">Electric</option>
+                                <option value="hybrid">Hybrid</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="statusFilter" class="form-label">Status</label>
+                            <select class="form-select" id="statusFilter">
+                                <option value="">All Status</option>
+                                <option value="available">Available</option>
+                                <option value="rented">Rented</option>
+                                <option value="maintenance">Under Maintenance</option>
+                                <option value="out-of-service">Out of Service</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cars Grid -->
+    <div class="row" id="carsGrid">
+        @{
+            var vehicles = ViewBag.Vehicles as List<CarRentalManagementSystem.Models.VehicleViewModel> ?? new List<CarRentalManagementSystem.Models.VehicleViewModel>();
+        }
+        
+        @if (vehicles.Any())
+        {
+            @foreach (var vehicle in vehicles)
+            {
+                <div class="col-lg-4 col-md-6 mb-4 vehicle-item" 
+                     data-vehicle-type="@vehicle.VehicleType.ToLower().Replace(" ", "-")"
+                     data-price="@vehicle.DailyRate"
+                     data-fuel="@vehicle.FuelType.ToLower()">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-img-top bg-light text-center p-4 position-relative">
+                            @if (!string.IsNullOrEmpty(vehicle.ImageUrl))
+                            {
+                                <img src="@vehicle.ImageUrl" alt="@vehicle.Model" class="img-fluid" style="max-height: 200px; object-fit: cover;">
+                            }
+                            else
+                            {
+                                @switch (vehicle.VehicleType.ToLower())
+                                {
+                                    case "motor bike":
+                                        <i class="bi bi-bicycle" style="font-size: 4rem; color: #6f42c1;"></i>
+                                        break;
+                                    case "cng":
+                                        <i class="bi bi-fuel-pump" style="font-size: 4rem; color: #28a745;"></i>
+                                        break;
+                                    case "private car":
+                                        <i class="bi bi-car-front" style="font-size: 4rem; color: #007bff;"></i>
+                                        break;
+                                    case "pickup":
+                                        <i class="bi bi-truck" style="font-size: 4rem; color: #ffc107;"></i>
+                                        break;
+                                    case "truck":
+                                        <i class="bi bi-truck" style="font-size: 4rem; color: #fd7e14;"></i>
+                                        break;
+                                    case "covered van":
+                                        <i class="bi bi-van" style="font-size: 4rem; color: #dc3545;"></i>
+                                        break;
+                                    default:
+                                        <i class="bi bi-car-front" style="font-size: 4rem; color: #6c757d;"></i>
+                                        break;
+                                }
+                            }
+                            <span class="badge @(vehicle.Status?.ToLower() switch { 
+                                "available" => "bg-success", 
+                                "rented" => "bg-warning", 
+                                "maintenance" => "bg-info", 
+                                "out-of-service" => "bg-danger",
+                                _ => "bg-secondary"
+                            }) status-badge position-absolute top-0 end-0 m-2">
+                                @vehicle.Status
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">@vehicle.Model</h5>
+                            <p class="card-text text-muted">
+                                @vehicle.VehicleType
+                            </p>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-outline-primary flex-fill" onclick="viewVehicleDetails(@vehicle.Id)">
+                                    <i class="bi bi-eye"></i> Vehicle Details
+                                </button>
+                                @if (vehicle.Status?.ToLower() == "available")
+                                {
+                                    <button class="btn btn-primary flex-fill">
+                                        <i class="bi bi-calendar-plus"></i> Rent Now
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-secondary flex-fill" disabled>
+                                        <i class="bi bi-clock"></i> @(vehicle.Status?.ToLower() == "rented" ? "Currently Rented" : 
+                                                                       vehicle.Status?.ToLower() == "maintenance" ? "Under Maintenance" : 
+                                                                       vehicle.Status?.ToLower() == "out-of-service" ? "Out of Service" : "Unavailable")
+                                    </button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12 text-center">
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i> No vehicles available at the moment. Please check back later.
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Pagination -->
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="Cars pagination">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<!-- Vehicle Details Modal -->
+<div class="modal fade" id="vehicleDetailsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">
+                    <i class="bi bi-car-front"></i> Vehicle Details
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="vehicleDetailsContent">
+                <!-- Content will be loaded dynamically -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-warning" onclick="editVehicleFromModal()">
+                    <i class="bi bi-pencil"></i> Edit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .status-badge {
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.5rem 0.75rem;
+        }
+        
+        .card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+
+        
+        .vehicle-item[style*="none"] {
+            display: none !important;
+        }
+        
+        /* Enhanced Vehicle Details Modal Styling */
+        .vehicle-info-section {
+            padding: 1rem 0;
+        }
+        
+        .info-card {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 1rem;
+            height: 100%;
+            transition: all 0.2s ease-in-out;
+        }
+        
+        .info-card:hover {
+            background: #e9ecef;
+            border-color: #dee2e6;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .info-card.highlight {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-color: #2196f3;
+        }
+        
+        .info-card.highlight:hover {
+            background: linear-gradient(135deg, #bbdefb 0%, #90caf9 100%);
+        }
+        
+        .modal-body {
+            padding: 2rem;
+        }
+        
+        .modal-body img {
+            border: 3px solid #f8f9fa;
+            transition: all 0.3s ease-in-out;
+        }
+        
+        .modal-body img:hover {
+            border-color: #007bff;
+            transform: scale(1.02);
+        }
+        
+        /* Clean card appearance for minimal view */
+        .card-body {
+            padding: 1rem;
+        }
+        
+        .card-title {
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .card-text.text-muted {
+            margin-bottom: 0;
+            font-size: 0.9rem;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        let currentVehicleId = null;
+        
+        // Add filter functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterSelects = document.querySelectorAll('select');
+            const vehicleItems = document.querySelectorAll('.vehicle-item');
+            
+            function filterVehicles() {
+                const vehicleType = document.getElementById('vehicleType').value;
+                const priceRange = document.getElementById('priceRange').value;
+                const fuelType = document.getElementById('fuelType').value;
+                const statusFilter = document.getElementById('statusFilter').value;
+                
+                vehicleItems.forEach(item => {
+                    let show = true;
+                    
+                    // Filter by vehicle type
+                    if (vehicleType && item.dataset.vehicleType !== vehicleType) {
+                        show = false;
+                    }
+                    
+                    // Filter by price range
+                    if (priceRange) {
+                        const price = parseFloat(item.dataset.price);
+                        switch (priceRange) {
+                            case '0-50':
+                                if (price > 50) show = false;
+                                break;
+                            case '50-100':
+                                if (price < 50 || price > 100) show = false;
+                                break;
+                            case '100-200':
+                                if (price < 100 || price > 200) show = false;
+                                break;
+                            case '200+':
+                                if (price < 200) show = false;
+                                break;
+                        }
+                    }
+                    
+                    // Filter by fuel type
+                    if (fuelType && item.dataset.fuel !== fuelType) {
+                        show = false;
+                    }
+                    
+                    // Filter by status
+                    if (statusFilter) {
+                        const status = item.querySelector('.status-badge').textContent.trim().toLowerCase();
+                        if (status !== statusFilter.toLowerCase()) {
+                            show = false;
+                        }
+                    }
+                    
+                    // Show/hide item
+                    item.style.display = show ? 'block' : 'none';
+                });
+                
+                // Update count
+                const visibleCount = document.querySelectorAll('.vehicle-item[style*="block"], .vehicle-item:not([style*="none"])').length;
+                console.log(`Showing ${visibleCount} vehicles`);
+            }
+            
+            filterSelects.forEach(select => {
+                select.addEventListener('change', filterVehicles);
+            });
+            
+            // Initial filter
+            filterVehicles();
+        });
+        
+        // Vehicle Details Modal Functions
+        function viewVehicleDetails(vehicleId) {
+            currentVehicleId = vehicleId;
+            
+            // Find vehicle data from the current page
+            const vehicles = @Html.Raw(Json.Serialize(vehicles));
+            const vehicle = vehicles.find(v => v.id === vehicleId);
+            
+            if (vehicle) {
+                const content = `
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="text-center mb-3">
+                                <img src="${vehicle.imageUrl || '/images/default-vehicle.jpg'}" 
+                                     class="img-fluid rounded shadow" 
+                                     style="max-height: 300px; object-fit: cover;"
+                                     alt="${vehicle.model}"
+                                     onerror="this.src='/images/default-vehicle.jpg'">
+                            </div>
+                            <div class="text-center">
+                                <span class="badge fs-6 ${vehicle.status === 'Available' ? 'bg-success' : vehicle.status === 'Rented' ? 'bg-warning' : 'bg-danger'}">
+                                    ${vehicle.status}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="vehicle-info-section">
+                                <h3 class="text-primary mb-3">${vehicle.model}</h3>
+                                <p class="text-muted fs-5 mb-4">${vehicle.vehicleType} • ${vehicle.year}</p>
+                                
+                                <div class="row g-3 mb-4">
+                                    <div class="col-6">
+                                        <div class="info-card">
+                                            <small class="text-muted d-block">Registration Number</small>
+                                            <strong class="fs-6">${vehicle.registrationNumber}</strong>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="info-card">
+                                            <small class="text-muted d-block">Chassis Number</small>
+                                            <strong class="fs-6">${vehicle.chassisNumber}</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row g-3 mb-4">
+                                    <div class="col-6">
+                                        <div class="info-card">
+                                            <small class="text-muted d-block">Color</small>
+                                            <strong class="fs-6">${vehicle.color}</strong>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="info-card">
+                                            <small class="text-muted d-block">Engine Capacity</small>
+                                            <strong class="fs-6">${vehicle.engineCapacity}</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row g-3 mb-4">
+                                    <div class="col-6">
+                                        <div class="info-card">
+                                            <small class="text-muted d-block">Fuel Type</small>
+                                            <strong class="fs-6">${vehicle.fuelType}</strong>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="info-card">
+                                            <small class="text-muted d-block">Number of Seats</small>
+                                            <strong class="fs-6">${vehicle.seats || 'N/A'}</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row g-3 mb-4">
+                                    <div class="col-6">
+                                        <div class="info-card highlight">
+                                            <small class="text-muted d-block">Daily Rate</small>
+                                            <strong class="fs-4 text-success">$${vehicle.dailyRate}</strong>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="info-card">
+                                            <small class="text-muted d-block">Vehicle ID</small>
+                                            <strong class="fs-6">#${vehicle.id}</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                ${vehicle.description ? `
+                                <div class="mb-4">
+                                    <div class="info-card">
+                                        <small class="text-muted d-block">Description</small>
+                                        <p class="mb-0 mt-2">${vehicle.description}</p>
+                                    </div>
+                                </div>
+                                ` : ''}
+                                
+                                ${vehicle.features && vehicle.features.length > 0 ? `
+                                <div class="mb-4">
+                                    <div class="info-card">
+                                        <small class="text-muted d-block mb-2">Features</small>
+                                        <div class="d-flex flex-wrap gap-2">
+                                            ${vehicle.features.map(feature => `<span class="badge bg-primary">${feature}</span>`).join('')}
+                                        </div>
+                                    </div>
+                                </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('vehicleDetailsContent').innerHTML = content;
+                const modal = new bootstrap.Modal(document.getElementById('vehicleDetailsModal'));
+                modal.show();
+            }
+        }
+        
+        function editVehicleFromModal() {
+            if (currentVehicleId) {
+                // Redirect to fleet management for editing
+                window.location.href = '@Url.Action("FleetManagement", "Home")';
+            }
+        }
+    </script>
+} 

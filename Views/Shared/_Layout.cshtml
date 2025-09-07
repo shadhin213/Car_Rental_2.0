@@ -1,0 +1,269 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Car Rental Management System</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/CarRentalManagementSystem.styles.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="bi bi-car-front"></i> Car Rental System
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link nav-btn text-white" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-white" href="#" id="vehicleDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-truck"></i> Vehicle Types
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="vehicleDropdown">
+                                <li><a class="dropdown-item" href="@Url.Action("Index", "Home", new { vehicleType = "motor bike" })"><i class="bi bi-bicycle"></i> Motor Bike</a></li>
+                                <li><a class="dropdown-item" href="@Url.Action("Index", "Home", new { vehicleType = "cng" })"><i class="bi bi-fuel-pump"></i> CNG</a></li>
+                                <li><a class="dropdown-item" href="@Url.Action("Index", "Home", new { vehicleType = "private car" })"><i class="bi bi-car-front"></i> Private Car</a></li>
+                                <li><a class="dropdown-item" href="@Url.Action("Index", "Home", new { vehicleType = "pickup" })"><i class="bi bi-truck"></i> Pickup</a></li>
+                                <li><a class="dropdown-item" href="@Url.Action("Index", "Home", new { vehicleType = "truck" })"><i class="bi bi-truck"></i> Truck</a></li>
+                                <li><a class="dropdown-item" href="@Url.Action("Index", "Home", new { vehicleType = "covered van" })"><i class="bi bi-van"></i> Covered Van</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-btn text-white" asp-area="" asp-controller="Home" asp-action="AvailableCars">
+                                <i class="bi bi-car-front"></i> Available Cars
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-btn text-white" asp-area="" asp-controller="Home" asp-action="Services">
+                                <i class="bi bi-tools"></i> Services
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-btn text-white" asp-area="" asp-controller="Home" asp-action="About">
+                                <i class="bi bi-info-circle"></i> About Us
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-btn text-white" asp-area="" asp-controller="Home" asp-action="Contact">
+                                <i class="bi bi-envelope"></i> Contact
+                            </a>
+                        </li>
+                        @if (Context.Session.GetString("UserId") != null)
+                        {
+                            var userRole = Context.Session.GetString("UserRole");
+                            <li class="nav-item">
+                                @if (userRole == "Admin")
+                                {
+                                    <a class="nav-link nav-btn text-white" asp-area="" asp-controller="Home" asp-action="AdminDashboard">
+                                        <i class="bi bi-speedometer2"></i> Admin Dashboard
+                                    </a>
+                                }
+                                else if (userRole == "Manager")
+                                {
+                                    <a class="nav-link nav-btn text-white" asp-area="" asp-controller="Home" asp-action="Dashboard">
+                                        <i class="bi bi-speedometer2"></i> Manager Dashboard
+                                    </a>
+                                }
+                                else if (userRole == "Customer")
+                                {
+                                    <a class="nav-link nav-btn text-white" asp-area="" asp-controller="Home" asp-action="CustomerDashboard">
+                                        <i class="bi bi-speedometer2"></i> Customer Dashboard
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a class="nav-link nav-btn text-white" asp-area="" asp-controller="Home" asp-action="Dashboard">
+                                        <i class="bi bi-speedometer2"></i> Dashboard
+                                    </a>
+                                }
+                            </li>
+                        }
+                    </ul>
+                    <ul class="navbar-nav">
+                        @if (Context.Session.GetString("UserId") == null)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link nav-btn text-white" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-btn text-white" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-person-circle"></i> @Context.Session.GetString("UserName")
+                                    <small class="badge bg-light text-dark ms-1">@Context.Session.GetString("UserRole")</small>
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Profile</a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Settings</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                                            <button type="submit" class="dropdown-item">
+                                                <i class="bi bi-box-arrow-right"></i> Logout
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    @if (
+        Context.Session.GetString("UserId") != null &&
+        ViewContext.RouteData.Values["Action"]?.ToString() != "Dashboard" &&
+        ViewContext.RouteData.Values["Action"]?.ToString() != "FleetManagement" &&
+        ViewContext.RouteData.Values["Action"]?.ToString() != "FinesManagement"
+    )
+    {
+        <div class="container">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+    }
+    else
+    {
+        @RenderBody()
+    }
+
+    @if (
+        ViewContext.RouteData.Values["Action"]?.ToString() == "Login" ||
+        ViewContext.RouteData.Values["Action"]?.ToString() == "Register" ||
+        ViewContext.RouteData.Values["Action"]?.ToString() == "Dashboard"
+    )
+    {
+        <!-- No footer for login, register, or dashboard pages -->
+    }
+    else
+    {
+        <footer class="footer-section mt-5">
+            <div class="container py-5">
+                <div class="row gy-4 align-items-center">
+                    <div class="col-md-3 text-center text-md-start mb-3 mb-md-0 animate-fade-in">
+                        <h5 class="fw-bold mb-3">About Us</h5>
+                        <p class="small text-muted mb-0">We provide reliable, affordable, and convenient car rental services with a focus on customer satisfaction and safety.</p>
+                    </div>
+                    <div class="col-md-2 text-center text-md-start mb-3 mb-md-0 animate-fade-in" style="animation-delay:0.1s;">
+                        <h6 class="fw-bold mb-3">Links</h6>
+                        <ul class="list-unstyled mb-0">
+                            <li><a href="@Url.Action("About", "Home")" class="footer-link">About Us</a></li>
+                            <li><a href="#" class="footer-link">Terms & Conditions</a></li>
+                            <li><a href="@Url.Action("Privacy", "Home")" class="footer-link">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3 text-center text-md-start mb-3 mb-md-0 animate-fade-in" style="animation-delay:0.2s;">
+                        <h6 class="fw-bold mb-3">Contact Info</h6>
+                        <ul class="list-unstyled mb-0">
+                            <li><i class="bi bi-geo-alt-fill me-2"></i>123 Car Rental Street, City</li>
+                            <li><i class="bi bi-telephone-fill me-2"></i>+1 (555) 123-4567</li>
+                            <li><i class="bi bi-envelope-fill me-2"></i>info@carrental.com</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-2 text-center text-md-start mb-3 mb-md-0 animate-fade-in" style="animation-delay:0.3s;">
+                        <h6 class="fw-bold mb-3">Follow Us</h6>
+                        <div class="d-flex justify-content-center justify-content-md-start gap-2">
+                            <a href="#" class="footer-social"><i class="bi bi-facebook"></i></a>
+                            <a href="#" class="footer-social"><i class="bi bi-twitter"></i></a>
+                            <a href="#" class="footer-social"><i class="bi bi-instagram"></i></a>
+                            <a href="#" class="footer-social"><i class="bi bi-linkedin"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-md-2 text-center text-md-end animate-fade-in" style="animation-delay:0.4s;">
+                        <img src="/favicon.ico" alt="Logo" style="width:48px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+                    </div>
+                </div>
+                <hr class="my-4 animate-fade-in" style="animation-delay:0.5s;">
+                <div class="row">
+                    <div class="col-12 text-center animate-fade-in" style="animation-delay:0.6s;">
+                        <small class="text-muted">&copy; @DateTime.Now.Year Car Rental Management System. All rights reserved.</small>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    }
+    
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <style id="global-scroll-isolation">
+        html, body {
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        main {
+            min-height: 100vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Ensure any sidebar with this id scrolls independently */
+        #sidebarMenu {
+            overflow-y: auto;
+            max-height: 100vh;
+            -webkit-overflow-scrolling: touch;
+        }
+    </style>
+
+    <script>
+        // Global scroll isolation between main content and sidebar
+        (function() {
+            function setupIsolation() {
+                var sidebar = document.getElementById('sidebarMenu');
+                var mainEl = document.querySelector('main');
+
+                if (!mainEl) return;
+
+                if (sidebar) {
+                    sidebar.addEventListener('wheel', function(e) {
+                        e.stopPropagation();
+                        var atTop = this.scrollTop === 0;
+                        var atBottom = this.scrollTop + this.clientHeight >= this.scrollHeight;
+                        var delta = e.deltaY;
+                        if ((delta < 0 && atTop) || (delta > 0 && atBottom)) {
+                            e.preventDefault();
+                        }
+                    }, { passive: false });
+
+                    sidebar.addEventListener('touchstart', function(e){ e.stopPropagation(); }, { passive: true });
+                    sidebar.addEventListener('touchmove', function(e){ e.stopPropagation(); }, { passive: true });
+                    sidebar.addEventListener('scroll', function(e){ e.stopPropagation(); });
+                }
+
+                mainEl.addEventListener('wheel', function(e){ e.stopPropagation(); }, { passive: true });
+                mainEl.addEventListener('touchstart', function(e){ e.stopPropagation(); }, { passive: true });
+                mainEl.addEventListener('touchmove', function(e){ e.stopPropagation(); }, { passive: true });
+                mainEl.addEventListener('scroll', function(e){ e.stopPropagation(); });
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', setupIsolation);
+            } else {
+                setupIsolation();
+            }
+        })();
+    </script>
+</body>
+</html>

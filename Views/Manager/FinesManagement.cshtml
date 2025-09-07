@@ -1,0 +1,621 @@
+@{
+    ViewData["Title"] = "Fines Management";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Mobile Navigation Toggle -->
+        <nav class="navbar navbar-dark bg-dark d-md-none fixed-top">
+            <div class="container-fluid">
+                <span class="navbar-brand mb-0 h1">Car Rental System</span>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Sidebar -->
+        <nav class="bg-dark sidebar position-fixed vh-100" style="width:250px;" id="sidebarMenu">
+            <div class="position-sticky pt-3">
+                <div class="text-center mb-4">
+                    <h4 class="text-white">Car Rental System</h4>
+                    <p class="text-muted">Welcome, @ViewBag.UserName!</p>
+                </div>
+                
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="@Url.Action("Dashboard", "Home")">
+                            <i class="bi bi-speedometer2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="#">
+                            <i class="bi bi-car-front"></i> Available Cars
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="#">
+                            <i class="bi bi-calendar-check"></i> My Rentals
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="@Url.Action("FleetManagement", "Home")">
+                            <i class="bi bi-truck"></i> Fleet Management
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active text-white" href="@Url.Action("FinesManagement", "Home")">
+                            <i class="bi bi-exclamation-triangle"></i> Fines Management
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="#">
+                            <i class="bi bi-people"></i> Customer Management
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="#">
+                            <i class="bi bi-credit-card"></i> Transactions
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="#">
+                            <i class="bi bi-tag"></i> Promotions
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="#">
+                            <i class="bi bi-star"></i> Reviews
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="#">
+                            <i class="bi bi-person-circle"></i> Profile
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="#">
+                            <i class="bi bi-gear"></i> Settings
+                        </a>
+                    </li>
+                </ul>
+                
+                <hr class="text-white">
+                
+                <form asp-controller="Account" asp-action="Logout" method="post" class="mt-3">
+                    <button type="submit" class="btn btn-outline-light w-100">
+                        <i class="bi bi-box-arrow-right"></i> Logout
+                    </button>
+                </form>
+            </div>
+        </nav>
+
+        <!-- Main content -->
+        <main class="flex-grow-1 ms-auto px-3">
+            <!-- Mobile top spacing -->
+            <div class="d-md-none" style="height: 60px;"></div>
+            
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2 mb-3 mb-md-0">Fines Management</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-group me-2">
+                        <button type="button" class="btn btn-sm btn-outline-secondary">Export Report</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary">Print</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="row mb-4">
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-warning shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                        Late Return Fines
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">3</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="bi bi-clock-history fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-danger shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                        Damage Fines
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">1</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="bi bi-exclamation-triangle fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-success shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                        Total Amount
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">$650</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="bi bi-currency-dollar fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-info shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                        Resolved Fines
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">8</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="bi bi-check-circle fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Late Return Fines Section -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card shadow">
+                        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                            <h6 class="m-0 font-weight-bold text-warning">
+                                <i class="bi bi-clock-history me-2"></i>Late Return Fines
+                            </h6>
+                            <button class="btn btn-sm btn-warning">
+                                <i class="bi bi-plus-circle"></i> Add New Fine
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-warning">
+                                        <tr>
+                                            <th>Customer</th>
+                                            <th>Car</th>
+                                            <th>Due Date</th>
+                                            <th>Return Date</th>
+                                            <th>Days Late</th>
+                                            <th>Fine Amount</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>John Doe</td>
+                                            <td>Toyota Camry (ABC-123)</td>
+                                            <td>2024-01-15</td>
+                                            <td>2024-01-18</td>
+                                            <td>3 days</td>
+                                            <td>$150</td>
+                                            <td><span class="badge bg-warning">Pending</span></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary">View</button>
+                                                <button class="btn btn-sm btn-outline-success">Resolve</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Jane Smith</td>
+                                            <td>Honda Civic (XYZ-789)</td>
+                                            <td>2024-01-12</td>
+                                            <td>2024-01-16</td>
+                                            <td>4 days</td>
+                                            <td>$200</td>
+                                            <td><span class="badge bg-warning">Pending</span></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary">View</button>
+                                                <button class="btn btn-sm btn-outline-success">Resolve</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Mike Johnson</td>
+                                            <td>Ford Focus (DEF-456)</td>
+                                            <td>2024-01-10</td>
+                                            <td>2024-01-14</td>
+                                            <td>4 days</td>
+                                            <td>$200</td>
+                                            <td><span class="badge bg-warning">Pending</span></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary">View</button>
+                                                <button class="btn btn-sm btn-outline-success">Resolve</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Damage Fines Section -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card shadow">
+                        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                            <h6 class="m-0 font-weight-bold text-danger">
+                                <i class="bi bi-exclamation-triangle me-2"></i>Damage Fines
+                            </h6>
+                            <button class="btn btn-sm btn-danger">
+                                <i class="bi bi-plus-circle"></i> Add New Fine
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-danger">
+                                        <tr>
+                                            <th>Customer</th>
+                                            <th>Car</th>
+                                            <th>Damage Type</th>
+                                            <th>Damage Date</th>
+                                            <th>Description</th>
+                                            <th>Fine Amount</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Sarah Wilson</td>
+                                            <td>Nissan Altima (GHI-789)</td>
+                                            <td>Scratch</td>
+                                            <td>2024-01-16</td>
+                                            <td>Deep scratch on passenger door</td>
+                                            <td>$200</td>
+                                            <td><span class="badge bg-danger">Pending</span></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary">View</button>
+                                                <button class="btn btn-sm btn-outline-success">Resolve</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fine Management Actions -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card shadow">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Fine Management Actions</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3 mb-3">
+                                    <div class="card border-left-primary">
+                                        <div class="card-body text-center">
+                                            <i class="bi bi-plus-circle fa-2x text-primary mb-2"></i>
+                                            <h6>Add New Fine</h6>
+                                            <p class="mb-2">Create new fine record</p>
+                                            <button class="btn btn-sm btn-outline-primary">Add Fine</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <div class="card border-left-success">
+                                        <div class="card-body text-center">
+                                            <i class="bi bi-check-circle fa-2x text-success mb-2"></i>
+                                            <h6>Resolve Fines</h6>
+                                            <p class="mb-2">Mark fines as resolved</p>
+                                            <button class="btn btn-sm btn-outline-success">Resolve</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <div class="card border-left-info">
+                                        <div class="card-body text-center">
+                                            <i class="bi bi-file-text fa-2x text-info mb-2"></i>
+                                            <h6>Generate Reports</h6>
+                                            <p class="mb-2">Export fine reports</p>
+                                            <button class="btn btn-sm btn-outline-info">Reports</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <div class="card border-left-warning">
+                                        <div class="card-body text-center">
+                                            <i class="bi bi-gear fa-2x text-warning mb-2"></i>
+                                            <h6>Fine Settings</h6>
+                                            <p class="mb-2">Configure fine rates</p>
+                                            <button class="btn btn-sm btn-outline-warning">Settings</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Fine Activity -->
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Recent Fine Activity</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="list-group list-group-flush">
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">Late Return Fine - John Doe</h6>
+                                        <small class="text-muted">Created on 2024-01-18</small>
+                                    </div>
+                                    <span class="badge bg-warning rounded-pill">Pending</span>
+                                </div>
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">Damage Fine - Sarah Wilson</h6>
+                                        <small class="text-muted">Created on 2024-01-16</small>
+                                    </div>
+                                    <span class="badge bg-danger rounded-pill">Pending</span>
+                                </div>
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">Late Return Fine - Jane Smith</h6>
+                                        <small class="text-muted">Created on 2024-01-16</small>
+                                    </div>
+                                    <span class="badge bg-warning rounded-pill">Pending</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Quick Actions</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-warning" type="button">
+                                    <i class="bi bi-plus-circle"></i> Add Late Return Fine
+                                </button>
+                                <button class="btn btn-danger" type="button">
+                                    <i class="bi bi-exclamation-triangle"></i> Add Damage Fine
+                                </button>
+                                <button class="btn btn-info" type="button">
+                                    <i class="bi bi-file-text"></i> Generate Report
+                                </button>
+                                <button class="btn btn-success" type="button">
+                                    <i class="bi bi-check-circle"></i> Bulk Resolve
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<style>
+    .sidebar {
+        min-height: 100vh;
+    }
+    
+    .border-left-primary {
+        border-left: 0.25rem solid #4e73df !important;
+    }
+    
+    .border-left-success {
+        border-left: 0.25rem solid #1cc88a !important;
+    }
+    
+    .border-left-info {
+        border-left: 0.25rem solid #36b9cc !important;
+    }
+    
+    .border-left-warning {
+        border-left: 0.25rem solid #f6c23e !important;
+    }
+    
+    .border-left-danger {
+        border-left: 0.25rem solid #e74a3b !important;
+    }
+    
+    .text-gray-300 {
+        color: #dddfeb !important;
+    }
+    
+    .text-gray-800 {
+        color: #5a5c69 !important;
+    }
+    
+    .table-hover tbody tr:hover {
+        background-color: rgba(0,0,0,.075);
+    }
+
+    /* Responsive Design */
+    @@media (max-width: 767.98px) {
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            width: 100%;
+            height: 100vh;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+            display: block !important;
+        }
+        
+        .sidebar.show {
+            transform: translateX(0);
+        }
+        
+        .sidebar.collapse:not(.show) {
+            display: none !important;
+        }
+        
+        main {
+            margin-left: 0 !important;
+            width: 100% !important;
+        }
+        
+        .card-body {
+            padding: 1rem;
+        }
+        
+        .btn-group {
+            flex-direction: column;
+            width: 100%;
+        }
+        
+        .btn-group .btn {
+            margin-bottom: 0.5rem;
+        }
+        
+        .d-flex.flex-column.flex-sm-row {
+            gap: 0.5rem;
+        }
+    }
+
+    @@media (max-width: 575.98px) {
+        .container-fluid {
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+        }
+        
+        .card {
+            margin-bottom: 1rem;
+        }
+        
+        .h2 {
+            font-size: 1.5rem;
+        }
+        
+        .fa-2x {
+            font-size: 1.5em;
+        }
+        
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+        }
+    }
+
+    @@media (min-width: 768px) and (max-width: 991.98px) {
+        .sidebar {
+            position: relative !important;
+            transform: none !important;
+            width: 25% !important;
+            display: block !important;
+        }
+        
+        main {
+            margin-left: 25% !important;
+            width: 75% !important;
+        }
+    }
+
+    @@media (min-width: 992px) {
+        .sidebar {
+            position: relative !important;
+            transform: none !important;
+            width: 16.666667% !important;
+            display: block !important;
+        }
+        
+        main {
+            margin-left: 16.666667% !important;
+            width: 83.333333% !important;
+        }
+    }
+
+    /* Smooth transitions */
+    .card {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+    
+    .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    /* Mobile navigation improvements */
+    .navbar-toggler {
+        border: none;
+        padding: 0.25rem 0.5rem;
+    }
+    
+    .navbar-toggler:focus {
+        box-shadow: none;
+    }
+    
+    /* Ensure proper spacing on all devices */
+    .row {
+        margin-left: -0.5rem;
+        margin-right: -0.5rem;
+    }
+    
+    .col-12, .col-sm-6, .col-md-4, .col-md-6, .col-lg-8, .col-lg-4, .col-xl-3 {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+
+    /* Sidebar specific fixes */
+    .sidebar {
+        min-height: 100vh;
+        overflow-y: auto;
+    }
+
+    /* Ensure sidebar is visible on desktop */
+    @@media (min-width: 768px) {
+        .sidebar.collapse:not(.show) {
+            display: block !important;
+        }
+    }
+
+    /* Mobile sidebar overlay */
+    @@media (max-width: 767.98px) {
+        .sidebar {
+            background-color: rgba(33, 37, 41, 0.95) !important;
+        }
+        
+        /* Add backdrop when sidebar is open */
+        .sidebar.show::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: -1;
+        }
+    }
+</style>

@@ -1,0 +1,246 @@
+@{
+    ViewData["Title"] = "Vehicle Types";
+}
+
+<!-- Hero Section -->
+<div class="hero-section bg-primary text-white py-5 mb-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4 animate-slide-in">
+                    <i class="bi bi-truck"></i> Our Vehicle Types
+                </h1>
+                <p class="lead mb-4 animate-slide-in-delay">
+                    Explore our comprehensive range of vehicles designed to meet all your transportation needs. 
+                    From personal rides to commercial solutions, we have the perfect vehicle for every purpose.
+                </p>
+                <div class="animate-slide-in-delay-2">
+                    <a href="#vehicleTypes" class="btn btn-light btn-lg me-3">
+                        <i class="bi bi-arrow-down"></i> Explore Vehicles
+                    </a>
+                    <a asp-controller="Home" asp-action="AvailableCars" class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-car-front"></i> View Available Cars
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <div class="hero-image animate-float">
+                    <i class="bi bi-truck text-white" style="font-size: 15rem; opacity: 0.3;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Vehicle Types Section -->
+<div id="vehicleTypes" class="container mb-5">
+    <h2 class="text-center mb-5">
+        <i class="bi bi-truck text-primary"></i> Our Vehicle Types
+    </h2>
+    <div class="row g-4">
+        <div class="col-md-4 col-sm-6">
+            <div class="card h-100 vehicle-card text-center shadow-sm" data-vehicle-type="motor-bike">
+                <div class="card-body">
+                    <i class="bi bi-bicycle fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">Motor Bike</h5>
+                    <p class="card-text">Perfect for quick city rides and solo travel</p>
+                    <div class="vehicle-details mt-3" style="display: none;">
+                        <small class="text-muted">Starting from $15/day</small>
+                        <br>
+                        <a href="@Url.Action("ViewVehiclesByCategory", "Home", new { category = "motor-bike" })" class="btn btn-sm btn-outline-primary mt-2">View Vehicles</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-6">
+            <div class="card h-100 vehicle-card text-center shadow-sm" data-vehicle-type="cng">
+                <div class="card-body">
+                    <i class="bi bi-fuel-pump fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">CNG</h5>
+                    <p class="card-text">Eco-friendly vehicles for environmentally conscious travel</p>
+                    <div class="vehicle-details mt-3" style="display: none;">
+                        <small class="text-muted">Starting from $25/day</small>
+                        <br>
+                        <a href="@Url.Action("ViewVehiclesByCategory", "Home", new { category = "cng" })" class="btn btn-sm btn-outline-success mt-2">View Vehicles</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-6">
+            <div class="card h-100 vehicle-card text-center shadow-sm" data-vehicle-type="private-car">
+                <div class="card-body">
+                    <i class="bi bi-car-front fa-3x text-danger mb-3"></i>
+                    <h5 class="card-title">Private Car</h5>
+                    <p class="card-text">Comfortable and stylish cars for personal and business use</p>
+                    <div class="vehicle-details mt-3" style="display: none;">
+                        <small class="text-muted">Starting from $35/day</small>
+                        <br>
+                        <a href="@Url.Action("ViewVehiclesByCategory", "Home", new { category = "private-car" })" class="btn btn-sm btn-outline-danger mt-2">View Vehicles</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-6">
+            <div class="card h-100 vehicle-card text-center shadow-sm" data-vehicle-type="pickup">
+                <div class="card-body">
+                    <i class="bi bi-truck fa-3x text-info mb-3"></i>
+                    <h5 class="card-title">Pickup</h5>
+                    <p class="card-text">Versatile pickup trucks for cargo and utility purposes</p>
+                    <div class="vehicle-details mt-3" style="display: none;">
+                        <small class="text-muted">Starting from $50/day</small>
+                        <br>
+                        <a href="@Url.Action("ViewVehiclesByCategory", "Home", new { category = "pickup" })" class="btn btn-sm btn-outline-info mt-2">View Vehicles</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-6">
+            <div class="card h-100 vehicle-card text-center shadow-sm" data-vehicle-type="truck">
+                <div class="card-body">
+                    <i class="bi bi-truck fa-3x text-warning mb-3"></i>
+                    <h5 class="card-title">Truck</h5>
+                    <p class="card-text">Heavy-duty vehicles for commercial and industrial use</p>
+                    <div class="vehicle-details mt-3" style="display: none;">
+                        <small class="text-muted">Starting from $80/day</small>
+                        <br>
+                        <a href="@Url.Action("ViewVehiclesByCategory", "Home", new { category = "truck" })" class="btn btn-sm btn-outline-warning mt-2">View Vehicles</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-6">
+            <div class="card h-100 vehicle-card text-center shadow-sm" data-vehicle-type="covered-van">
+                <div class="card-body">
+                    <i class="bi bi-van fa-3x text-dark mb-3"></i>
+                    <h5 class="card-title">Covered Van</h5>
+                    <p class="card-text">Protected cargo transport with covered storage space</p>
+                    <div class="vehicle-details mt-3" style="display: none;">
+                        <small class="text-muted">Starting from $60/day</small>
+                        <br>
+                        <a href="@Url.Action("ViewVehiclesByCategory", "Home", new { category = "covered-van" })" class="btn btn-sm btn-outline-dark mt-2">View Vehicles</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Vehicle Features Section -->
+<div class="container mb-5">
+    <h2 class="text-center mb-5">
+        <i class="bi bi-star text-warning"></i> Why Choose Our Vehicles
+    </h2>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card text-center h-100 shadow-sm feature-card">
+                <div class="card-body">
+                    <i class="bi bi-shield-check fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">Well Maintained</h5>
+                    <p class="card-text">All our vehicles undergo regular maintenance and safety inspections to ensure your safety.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center h-100 shadow-sm feature-card">
+                <div class="card-body">
+                    <i class="bi bi-currency-dollar fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">Competitive Pricing</h5>
+                    <p class="card-text">Get the best value for your money with our competitive rental rates and transparent pricing.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center h-100 shadow-sm feature-card">
+                <div class="card-body">
+                    <i class="bi bi-headset fa-3x text-info mb-3"></i>
+                    <h5 class="card-title">24/7 Support</h5>
+                    <p class="card-text">Round-the-clock customer support for all your rental needs and emergency assistance.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Call to Action Section -->
+<div class="container mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 text-center">
+            <div class="card bg-primary text-white shadow">
+                <div class="card-body py-5">
+                    <h3 class="card-title mb-3">
+                        <i class="bi bi-calendar-check"></i> Ready to Rent?
+                    </h3>
+                    <p class="card-text mb-4">Browse our available vehicles and start your journey with the perfect rental car.</p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a asp-controller="Home" asp-action="AvailableCars" class="btn btn-light">
+                            <i class="bi bi-car-front"></i> Browse Available Cars
+                        </a>
+                        <a asp-controller="Home" asp-action="Contact" class="btn btn-outline-light">
+                            <i class="bi bi-telephone"></i> Contact Us
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.hero-section {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.1);
+    z-index: 1;
+}
+
+.hero-section .container {
+    position: relative;
+    z-index: 2;
+}
+
+.animate-slide-in {
+    animation: slideInLeft 1s ease-out;
+}
+
+.animate-slide-in-delay {
+    animation: slideInLeft 1s ease-out 0.3s both;
+}
+
+.animate-slide-in-delay-2 {
+    animation: slideInLeft 1s ease-out 0.6s both;
+}
+
+.animate-float {
+    animation: float 6s ease-in-out infinite;
+}
+
+@@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+</style>
