@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+﻿﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -109,7 +109,7 @@
                                     <small class="badge bg-light text-dark ms-1">@Context.Session.GetString("UserRole")</small>
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Profile</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("Profile", "Home")"><i class="bi bi-person"></i> Profile</a></li>
                                     <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Settings</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li>
@@ -228,6 +228,15 @@
     </style>
 
     <script>
+        // Sticky navbar scroll effect
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 50) {
+                $('.navbar').addClass('scrolled');
+            } else {
+                $('.navbar').removeClass('scrolled');
+            }
+        });
+
         // Global scroll isolation between main content and sidebar
         (function() {
             function setupIsolation() {
