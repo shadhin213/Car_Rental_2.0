@@ -272,6 +272,107 @@ public class HomeController : Controller
         return View("~/Views/Customer/CustomerDashboard.cshtml");
     }
 
+    public async Task<IActionResult> Profile()
+    {
+        var userId = HttpContext.Session.GetString("UserId");
+        var userRole = HttpContext.Session.GetString("UserRole");
+        
+        if (string.IsNullOrEmpty(userId) || userRole != "Customer")
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        try
+        {
+            if (_context == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == int.Parse(userId));
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var profileViewModel = new ProfileViewModel
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                Address = user.Address,
+                ProfileImageUrl = user.ProfileImageUrl,
+                PreferredCarType = user.PreferredCarType,
+                DrivingLicenseImageUrl = user.DrivingLicenseImageUrl,
+                NidImageUrl = user.NidImageUrl,
+                CarNumber = user.CarNumber,
+                DrivingExperienceYears = user.DrivingExperienceYears,
+                LicenseNumber = user.LicenseNumber,
+                CreatedAt = user.CreatedAt
+            };
+
+            return View("~/Views/Customer/Profile.cshtml", profileViewModel);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error retrieving user profile");
+            return RedirectToAction("Login", "Account");
+        }
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> UpdateProfile([FromBody] ProfileViewModel profileData)
+    {
+        var userId = HttpContext.Session.GetString("UserId");
+        var userRole = HttpContext.Session.GetString("UserRole");
+        
+        if (string.IsNullOrEmpty(userId) || userRole != "Customer")
+        {
+            return Json(new { success = false, message = "Unauthorized access" });
+        }
+
+        try
+        {
+            if (_context == null)
+            {
+                return Json(new { success = false, message = "Database context not available" });
+            }
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == int.Parse(userId));
+            if (user == null)
+            {
+                return Json(new { success = false, message = "User not found" });
+            }
+
+            // Update user profile
+            user.FirstName = profileData.FirstName;
+            user.LastName = profileData.LastName;
+            user.PhoneNumber = profileData.PhoneNumber;
+            user.Address = profileData.Address;
+            user.ProfileImageUrl = profileData.ProfileImageUrl;
+            user.PreferredCarType = profileData.PreferredCarType;
+            user.DrivingLicenseImageUrl = profileData.DrivingLicenseImageUrl;
+            user.NidImageUrl = profileData.NidImageUrl;
+            user.CarNumber = profileData.CarNumber;
+            user.DrivingExperienceYears = profileData.DrivingExperienceYears;
+            user.LicenseNumber = profileData.LicenseNumber;
+
+            await _context.SaveChangesAsync();
+
+            // Update session data
+            HttpContext.Session.SetString("UserName", user.FullName);
+
+            return Json(new { success = true, message = "Profile updated successfully!" });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error updating user profile");
+            return Json(new { success = false, message = "Error updating profile: " + ex.Message });
+        }
+    }
+
     public async Task<IActionResult> AvailableCars()
     {
         try
@@ -625,6 +726,51 @@ public class HomeController : Controller
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error uploading vehicle image");
+            return StatusCode(500, new { success = false, message = ex.Message });
+        }
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> UploadProfileImage(IFormFile file)
+    {
+        try
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest(new { success = false, message = "No file uploaded" });
+            }
+
+            if (_env == null)
+            {
+                return StatusCode(500, new { success = false, message = "Hosting environment not available" });
+            }
+
+            var userId = HttpContext.Session.GetString("UserId");
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized(new { success = false, message = "User not authenticated" });
+            }
+
+            var uploadsRoot = Path.Combine(_env.WebRootPath, "uploads", "profiles");
+            if (!Directory.Exists(uploadsRoot))
+            {
+                Directory.CreateDirectory(uploadsRoot);
+            }
+
+            var safeFileName = $"profile_{userId}_{Path.GetFileNameWithoutExtension(Path.GetRandomFileName())}{Path.GetExtension(file.FileName)}";
+            var fullPath = Path.Combine(uploadsRoot, safeFileName);
+
+            using (var stream = System.IO.File.Create(fullPath))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            var relativePath = $"/uploads/profiles/{safeFileName}";
+            return Ok(new { success = true, url = relativePath });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error uploading profile image");
             return StatusCode(500, new { success = false, message = ex.Message });
         }
     }
