@@ -10,21 +10,13 @@ namespace CarRentalManagementSystem.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "Role",
-                table: "Users",
-                type: "nvarchar(20)",
-                maxLength: 20,
-                nullable: false,
-                defaultValue: "");
+            migrationBuilder.Sql("IF COL_LENGTH('Users','Role') IS NULL ALTER TABLE [Users] ADD [Role] NVARCHAR(20) NOT NULL DEFAULT N'Customer'");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "Role",
-                table: "Users");
+            migrationBuilder.Sql("IF COL_LENGTH('Users','Role') IS NOT NULL ALTER TABLE [Users] DROP COLUMN [Role]");
         }
     }
 }

@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Car_Rental_2.0\\CarRentalManagementSystem.csproj": {}
+    "F:\\Versity_pro\\Car_Renta\\CarRentalManagementSystem.csproj": {}
   },
   "projects": {
-    "D:\\Car_Rental_2.0\\CarRentalManagementSystem.csproj": {
+    "F:\\Versity_pro\\Car_Renta\\CarRentalManagementSystem.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Car_Rental_2.0\\CarRentalManagementSystem.csproj",
+        "projectUniqueName": "F:\\Versity_pro\\Car_Renta\\CarRentalManagementSystem.csproj",
         "projectName": "CarRentalManagementSystem",
-        "projectPath": "D:\\Car_Rental_2.0\\CarRentalManagementSystem.csproj",
-        "packagesPath": "C:\\Users\\This pc\\.nuget\\packages\\",
-        "outputPath": "D:\\Car_Rental_2.0\\obj\\",
+        "projectPath": "F:\\Versity_pro\\Car_Renta\\CarRentalManagementSystem.csproj",
+        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
+        "outputPath": "F:\\Versity_pro\\Car_Renta\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\This pc\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -80,7 +80,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.301/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

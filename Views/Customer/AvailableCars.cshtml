@@ -87,16 +87,6 @@
                                 <option value="hybrid">Hybrid</option>
                             </select>
                         </div>
-                        <div class="col-md-3 mb-3">
-                            <label for="statusFilter" class="form-label">Status</label>
-                            <select class="form-select" id="statusFilter">
-                                <option value="">All Status</option>
-                                <option value="available">Available</option>
-                                <option value="rented">Rented</option>
-                                <option value="maintenance">Under Maintenance</option>
-                                <option value="out-of-service">Out of Service</option>
-                            </select>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -106,7 +96,8 @@
     <!-- Cars Grid -->
     <div class="row" id="carsGrid">
         @{
-            var vehicles = ViewBag.Vehicles as List<CarRentalManagementSystem.Models.VehicleViewModel> ?? new List<CarRentalManagementSystem.Models.VehicleViewModel>();
+            var allVehicles = ViewBag.Vehicles as List<CarRentalManagementSystem.Models.VehicleViewModel> ?? new List<CarRentalManagementSystem.Models.VehicleViewModel>();
+            var vehicles = allVehicles.Where(v => v.Status?.ToLower() == "available").ToList();
         }
         
         @if (vehicles.Any())
@@ -236,9 +227,6 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-warning" onclick="editVehicleFromModal()">
-                    <i class="bi bi-pencil"></i> Edit
-                </button>
             </div>
         </div>
     </div>
@@ -342,7 +330,6 @@
                 const vehicleType = document.getElementById('vehicleType').value;
                 const priceRange = document.getElementById('priceRange').value;
                 const fuelType = document.getElementById('fuelType').value;
-                const statusFilter = document.getElementById('statusFilter').value;
                 
                 vehicleItems.forEach(item => {
                     let show = true;
@@ -376,14 +363,6 @@
                         show = false;
                     }
                     
-                    // Filter by status
-                    if (statusFilter) {
-                        const status = item.querySelector('.status-badge').textContent.trim().toLowerCase();
-                        if (status !== statusFilter.toLowerCase()) {
-                            show = false;
-                        }
-                    }
-                    
                     // Show/hide item
                     item.style.display = show ? 'block' : 'none';
                 });
@@ -406,8 +385,8 @@
             currentVehicleId = vehicleId;
             
             // Find vehicle data from the current page
-            const vehicles = @Html.Raw(Json.Serialize(vehicles));
-            const vehicle = vehicles.find(v => v.id === vehicleId);
+            const allVehicles = @Html.Raw(Json.Serialize(allVehicles));
+            const vehicle = allVehicles.find(v => v.id === vehicleId);
             
             if (vehicle) {
                 const content = `
@@ -521,11 +500,5 @@
             }
         }
         
-        function editVehicleFromModal() {
-            if (currentVehicleId) {
-                // Redirect to fleet management for editing
-                window.location.href = '@Url.Action("FleetManagement", "Home")';
-            }
-        }
     </script>
 } 

@@ -31,7 +31,17 @@ namespace CarRentalManagementSystem.Controllers
             {
                 var hashedPassword = HashPassword(model.Password);
                 var user = await _context.Users
-                    .FirstOrDefaultAsync(u => u.Email == model.Email && u.Password == hashedPassword && u.IsActive);
+                    .Where(u => u.Email == model.Email && u.Password == hashedPassword && u.IsActive)
+                    .Select(u => new User
+                    {
+                        Id = u.Id,
+                        Email = u.Email,
+                        FirstName = u.FirstName,
+                        LastName = u.LastName,
+                        Role = u.Role
+                    })
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync();
 
                 if (user != null)
                 {
