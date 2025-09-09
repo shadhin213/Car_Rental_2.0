@@ -164,9 +164,18 @@
                                 </button>
                                 @if (vehicle.Status?.ToLower() == "available")
                                 {
-                                    <button class="btn btn-primary flex-fill">
-                                        <i class="bi bi-calendar-plus"></i> Rent Now
-                                    </button>
+                                    @if (Context.Session.GetString("UserId") != null)
+                                    {
+                                        <button class="btn btn-primary flex-fill" onclick="openRentalModal(@vehicle.Id)">
+                                            <i class="bi bi-calendar-plus"></i> Rent Now
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-warning flex-fill" onclick="openRentalModal(@vehicle.Id)" title="Login required to rent">
+                                            <i class="bi bi-lock"></i> Login to Rent
+                                        </button>
+                                    }
                                 }
                                 else
                                 {
@@ -227,6 +236,240 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Rental Modal -->
+<div class="modal fade" id="rentalModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">
+                    <i class="bi bi-calendar-check"></i> Rent Vehicle
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <!-- Vehicle Information -->
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-header bg-light">
+                                <h6 class="mb-0"><i class="bi bi-car-front"></i> Vehicle Details</h6>
+                            </div>
+                            <div class="card-body" id="rentalVehicleInfo">
+                                <!-- Vehicle info will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Rental Form -->
+                    <div class="col-md-8">
+                        <form id="rentalForm">
+                            <input type="hidden" id="rentalVehicleId" name="vehicleId">
+                            
+                            <!-- Rental Period -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="rentalStartDate" class="form-label">Start Date <span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control" id="rentalStartDate" name="startDate" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="rentalEndDate" class="form-label">End Date <span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control" id="rentalEndDate" name="endDate" required>
+                                </div>
+                            </div>
+                            
+                            <!-- Customer Information -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="customerName" class="form-label">Full Name <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="customerName" name="customerName" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="customerEmail" class="form-label">Email <span class="text-danger">*</span></label>
+                                    <input type="email" class="form-control" id="customerEmail" name="customerEmail" required>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="customerPhone" class="form-label">Phone Number <span class="text-danger">*</span></label>
+                                    <input type="tel" class="form-control" id="customerPhone" name="customerPhone" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="customerLicense" class="form-label">Driver's License <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="customerLicense" name="customerLicense" required>
+                                </div>
+                            </div>
+                            
+                            <!-- Rental Terms & Conditions -->
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <h6 class="mb-0"><i class="bi bi-file-text"></i> Rental Terms & Conditions</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h6 class="text-primary">Rental Features:</h6>
+                                            <ul class="list-unstyled">
+                                                <li><i class="bi bi-check-circle text-success"></i> 24/7 Roadside Assistance</li>
+                                                <li><i class="bi bi-check-circle text-success"></i> Free Insurance Coverage</li>
+                                                <li><i class="bi bi-check-circle text-success"></i> Unlimited Mileage</li>
+                                                <li><i class="bi bi-check-circle text-success"></i> GPS Navigation System</li>
+                                                <li><i class="bi bi-check-circle text-success"></i> Emergency Contact Support</li>
+                                                <li><i class="bi bi-check-circle text-success"></i> Vehicle Maintenance Included</li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6 class="text-warning">Important Conditions:</h6>
+                                            <ul class="list-unstyled small">
+                                                <li><i class="bi bi-exclamation-triangle text-warning"></i> Minimum rental period: 1 day</li>
+                                                <li><i class="bi bi-exclamation-triangle text-warning"></i> Maximum rental period: 30 days</li>
+                                                <li><i class="bi bi-exclamation-triangle text-warning"></i> Valid driver's license required</li>
+                                                <li><i class="bi bi-exclamation-triangle text-warning"></i> Age requirement: 21+ years</li>
+                                                <li><i class="bi bi-exclamation-triangle text-warning"></i> Security deposit: $200</li>
+                                                <li><i class="bi bi-exclamation-triangle text-warning"></i> Late return fee: $50/day</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Rental Summary -->
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <h6 class="mb-0"><i class="bi bi-calculator"></i> Rental Summary</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="d-flex justify-content-between">
+                                                <span>Daily Rate:</span>
+                                                <span id="dailyRate">$0.00</span>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <span>Number of Days:</span>
+                                                <span id="rentalDays">0</span>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <span>Subtotal:</span>
+                                                <span id="subtotal">$0.00</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="d-flex justify-content-between">
+                                                <span>Security Deposit:</span>
+                                                <span>$200.00</span>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <span>Tax (10%):</span>
+                                                <span id="taxAmount">$0.00</span>
+                                            </div>
+                                            <hr>
+                                            <div class="d-flex justify-content-between fw-bold">
+                                                <span>Total Amount:</span>
+                                                <span id="totalAmount">$200.00</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Agreement Checkbox -->
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="agreeTerms" required>
+                                <label class="form-check-label" for="agreeTerms">
+                                    I agree to the <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">Terms and Conditions</a> and understand the rental policies.
+                                </label>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" onclick="processRental()">
+                    <i class="bi bi-credit-card"></i> Confirm Rental
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Terms and Conditions Modal -->
+<div class="modal fade" id="termsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Terms and Conditions</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <h6>Rental Agreement Terms:</h6>
+                <ol>
+                    <li><strong>Driver Requirements:</strong> Must be at least 21 years old with a valid driver's license.</li>
+                    <li><strong>Rental Period:</strong> Minimum 1 day, maximum 30 days per rental.</li>
+                    <li><strong>Payment:</strong> Full payment required at the time of rental, including security deposit.</li>
+                    <li><strong>Insurance:</strong> Basic insurance included. Additional coverage available for purchase.</li>
+                    <li><strong>Vehicle Return:</strong> Vehicle must be returned on time and in the same condition as received.</li>
+                    <li><strong>Late Fees:</strong> $50 per day for late returns after the agreed return date.</li>
+                    <li><strong>Damage Policy:</strong> Customer is responsible for any damage beyond normal wear and tear.</li>
+                    <li><strong>Cancellation:</strong> Free cancellation up to 24 hours before rental start date.</li>
+                    <li><strong>Fuel Policy:</strong> Vehicle must be returned with the same fuel level as received.</li>
+                    <li><strong>Prohibited Use:</strong> No smoking, pets, or off-road driving allowed.</li>
+                </ol>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Login Required Modal -->
+<div class="modal fade" id="loginRequiredModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-dark">
+                <h5 class="modal-title">
+                    <i class="bi bi-exclamation-triangle"></i> Login Required
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <div class="mb-4">
+                    <i class="bi bi-person-x-circle text-warning" style="font-size: 4rem;"></i>
+                </div>
+                <h4 class="text-dark mb-3">Please Login to Rent a Car</h4>
+                <p class="text-muted mb-4">
+                    You need to be logged in to rent a vehicle. Please create an account or login to continue with your rental.
+                </p>
+                <div class="row g-3">
+                    <div class="col-6">
+                        <a href="@Url.Action("Login", "Account")" class="btn btn-primary w-100">
+                            <i class="bi bi-box-arrow-in-right"></i> Login
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="@Url.Action("Register", "Account")" class="btn btn-success w-100">
+                            <i class="bi bi-person-plus"></i> Register
+                        </a>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <small class="text-muted">
+                        <i class="bi bi-info-circle"></i> 
+                        Registration is quick and free. You'll be able to rent vehicles immediately after creating your account.
+                    </small>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle"></i> Cancel
+                </button>
             </div>
         </div>
     </div>
@@ -313,6 +556,98 @@
         .card-text.text-muted {
             margin-bottom: 0;
             font-size: 0.9rem;
+        }
+        
+        /* Rental Modal Styling */
+        .modal-xl {
+            max-width: 1200px;
+        }
+        
+        .rental-feature-list li {
+            padding: 0.25rem 0;
+        }
+        
+        .rental-conditions-list li {
+            padding: 0.25rem 0;
+            font-size: 0.9rem;
+        }
+        
+        .rental-summary-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 1px solid #dee2e6;
+        }
+        
+        .rental-summary-card .card-header {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            color: white;
+        }
+        
+        .terms-conditions-card {
+            border-left: 4px solid #28a745;
+        }
+        
+        .rental-form-section {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+        
+        .vehicle-info-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border: 1px solid #e9ecef;
+        }
+        
+        .vehicle-info-card .card-header {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            color: white;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        .required-field::after {
+            content: " *";
+            color: #dc3545;
+            font-weight: bold;
+        }
+        
+        /* Login Required Modal Styling */
+        .login-required-modal .modal-content {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .login-required-modal .modal-header {
+            border-radius: 15px 15px 0 0;
+            border-bottom: none;
+        }
+        
+        .login-required-modal .modal-body {
+            padding: 2rem;
+        }
+        
+        .login-required-modal .btn {
+            border-radius: 8px;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+        }
+        
+        .login-required-modal .btn-primary {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            border: none;
+        }
+        
+        .login-required-modal .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+            border: none;
+        }
+        
+        .login-required-modal .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
     </style>
 }
@@ -499,6 +834,193 @@
                 modal.show();
             }
         }
+        
+        // Check if user is authenticated
+        function isUserAuthenticated() {
+            return @(Context.Session.GetString("UserId") != null ? "true" : "false");
+        }
+        
+        // Show login required modal
+        function showLoginRequiredModal() {
+            const modal = new bootstrap.Modal(document.getElementById('loginRequiredModal'));
+            modal.show();
+        }
+        
+        // Rental Modal Functions
+        function openRentalModal(vehicleId) {
+            // Check if user is logged in
+            if (!isUserAuthenticated()) {
+                showLoginRequiredModal();
+                return;
+            }
+            
+            currentVehicleId = vehicleId;
+            
+            // Find vehicle data from the current page
+            const allVehicles = @Html.Raw(Json.Serialize(allVehicles));
+            const vehicle = allVehicles.find(v => v.id === vehicleId);
+            
+            if (vehicle) {
+                // Populate vehicle info in rental modal
+                const vehicleInfo = `
+                    <div class="text-center mb-3">
+                        <img src="${vehicle.imageUrl || '/images/default-vehicle.jpg'}" 
+                             class="img-fluid rounded shadow" 
+                             style="max-height: 150px; object-fit: cover;"
+                             alt="${vehicle.model}"
+                             onerror="this.src='/images/default-vehicle.jpg'">
+                    </div>
+                    <h6 class="text-primary">${vehicle.model}</h6>
+                    <p class="text-muted small">${vehicle.vehicleType} • ${vehicle.year}</p>
+                    <div class="mb-2">
+                        <small class="text-muted">Registration:</small><br>
+                        <strong>${vehicle.registrationNumber}</strong>
+                    </div>
+                    <div class="mb-2">
+                        <small class="text-muted">Color:</small><br>
+                        <strong>${vehicle.color}</strong>
+                    </div>
+                    <div class="mb-2">
+                        <small class="text-muted">Fuel Type:</small><br>
+                        <strong>${vehicle.fuelType}</strong>
+                    </div>
+                    <div class="mb-2">
+                        <small class="text-muted">Daily Rate:</small><br>
+                        <strong class="text-success fs-5">$${vehicle.dailyRate}</strong>
+                    </div>
+                `;
+                
+                document.getElementById('rentalVehicleInfo').innerHTML = vehicleInfo;
+                document.getElementById('rentalVehicleId').value = vehicleId;
+                document.getElementById('dailyRate').textContent = `$${vehicle.dailyRate}`;
+                
+                // Set minimum date to today
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('rentalStartDate').min = today;
+                document.getElementById('rentalEndDate').min = today;
+                
+                // Clear form
+                document.getElementById('rentalForm').reset();
+                document.getElementById('rentalVehicleId').value = vehicleId;
+                document.getElementById('dailyRate').textContent = `$${vehicle.dailyRate}`;
+                
+                // Show modal
+                const modal = new bootstrap.Modal(document.getElementById('rentalModal'));
+                modal.show();
+            }
+        }
+        
+        // Calculate rental cost
+        function calculateRentalCost() {
+            const startDate = new Date(document.getElementById('rentalStartDate').value);
+            const endDate = new Date(document.getElementById('rentalEndDate').value);
+            const dailyRate = parseFloat(document.getElementById('dailyRate').textContent.replace('$', ''));
+            
+            if (startDate && endDate && !isNaN(dailyRate)) {
+                const timeDiff = endDate.getTime() - startDate.getTime();
+                const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+                
+                if (daysDiff > 0) {
+                    const subtotal = daysDiff * dailyRate;
+                    const tax = subtotal * 0.10; // 10% tax
+                    const total = subtotal + tax + 200; // Security deposit
+                    
+                    document.getElementById('rentalDays').textContent = daysDiff;
+                    document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+                    document.getElementById('taxAmount').textContent = `$${tax.toFixed(2)}`;
+                    document.getElementById('totalAmount').textContent = `$${total.toFixed(2)}`;
+                } else {
+                    document.getElementById('rentalDays').textContent = '0';
+                    document.getElementById('subtotal').textContent = '$0.00';
+                    document.getElementById('taxAmount').textContent = '$0.00';
+                    document.getElementById('totalAmount').textContent = '$200.00';
+                }
+            }
+        }
+        
+        // Process rental booking
+        function processRental() {
+            const form = document.getElementById('rentalForm');
+            const agreeTerms = document.getElementById('agreeTerms').checked;
+            
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            if (!agreeTerms) {
+                alert('Please agree to the terms and conditions to proceed.');
+                return;
+            }
+            
+            // Validate dates
+            const startDate = new Date(document.getElementById('rentalStartDate').value);
+            const endDate = new Date(document.getElementById('rentalEndDate').value);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            if (startDate < today) {
+                alert('Start date cannot be in the past.');
+                return;
+            }
+            
+            if (endDate <= startDate) {
+                alert('End date must be after start date.');
+                return;
+            }
+            
+            const daysDiff = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
+            if (daysDiff > 30) {
+                alert('Maximum rental period is 30 days.');
+                return;
+            }
+            
+            // Collect form data
+            const formData = new FormData(form);
+            const rentalData = {
+                vehicleId: formData.get('vehicleId'),
+                startDate: formData.get('startDate'),
+                endDate: formData.get('endDate'),
+                customerName: formData.get('customerName'),
+                customerEmail: formData.get('customerEmail'),
+                customerPhone: formData.get('customerPhone'),
+                customerLicense: formData.get('customerLicense'),
+                totalAmount: document.getElementById('totalAmount').textContent.replace('$', ''),
+                rentalDays: document.getElementById('rentalDays').textContent
+            };
+            
+            // Show confirmation
+            if (confirm(`Confirm rental for ${rentalData.rentalDays} days?\nTotal Amount: $${rentalData.totalAmount}`)) {
+                // Here you would typically send the data to your backend
+                // For now, we'll show a success message
+                alert('Rental request submitted successfully! You will receive a confirmation email shortly.');
+                
+                // Close modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('rentalModal'));
+                modal.hide();
+                
+                // Reset form
+                form.reset();
+            }
+        }
+        
+        // Add event listeners for date changes
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('rentalStartDate').addEventListener('change', function() {
+                const startDate = new Date(this.value);
+                const endDateInput = document.getElementById('rentalEndDate');
+                endDateInput.min = this.value;
+                
+                // If end date is before new start date, clear it
+                if (endDateInput.value && new Date(endDateInput.value) <= startDate) {
+                    endDateInput.value = '';
+                }
+                
+                calculateRentalCost();
+            });
+            
+            document.getElementById('rentalEndDate').addEventListener('change', calculateRentalCost);
+        });
         
     </script>
 } 
