@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "F:\\Versity_pro\\Car_Renta\\CarRentalManagementSystem.csproj": {}
+    "F:\\Versity_pro\\Car_Rental_2.0\\CarRentalManagementSystem.csproj": {}
   },
   "projects": {
-    "F:\\Versity_pro\\Car_Renta\\CarRentalManagementSystem.csproj": {
+    "F:\\Versity_pro\\Car_Rental_2.0\\CarRentalManagementSystem.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\Versity_pro\\Car_Renta\\CarRentalManagementSystem.csproj",
+        "projectUniqueName": "F:\\Versity_pro\\Car_Rental_2.0\\CarRentalManagementSystem.csproj",
         "projectName": "CarRentalManagementSystem",
-        "projectPath": "F:\\Versity_pro\\Car_Renta\\CarRentalManagementSystem.csproj",
+        "projectPath": "F:\\Versity_pro\\Car_Rental_2.0\\CarRentalManagementSystem.csproj",
         "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "F:\\Versity_pro\\Car_Renta\\obj\\",
+        "outputPath": "F:\\Versity_pro\\Car_Rental_2.0\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

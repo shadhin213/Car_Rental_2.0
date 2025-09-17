@@ -24,7 +24,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="#my-bookings">
+                        <a class="nav-link text-white" href="@Url.Action("MyBookings", "Home")">
                             <i class="fas fa-calendar-check me-2"></i>My Bookings
                         </a>
                     </li>
@@ -119,9 +119,9 @@
                                 <a href="@Url.Action("AvailableCars", "Home")" class="btn btn-outline-primary btn-sm">
                                     <i class="fas fa-search me-2"></i>Browse Cars
                                 </a>
-                                <button class="btn btn-outline-info btn-sm">
+                                <a href="@Url.Action("MyBookings", "Home")" class="btn btn-outline-info btn-sm">
                                     <i class="fas fa-calendar-check me-2"></i>My Bookings
-                                </button>
+                                </a>
                                 <button class="btn btn-outline-success btn-sm">
                                     <i class="fas fa-history me-2"></i>Rental History
                                 </button>

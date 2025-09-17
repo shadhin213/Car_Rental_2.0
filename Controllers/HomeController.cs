@@ -272,6 +272,23 @@ public class HomeController : Controller
         return View("~/Views/Customer/CustomerDashboard.cshtml");
     }
 
+    public IActionResult MyBookings()
+    {
+        var userId = HttpContext.Session.GetString("UserId");
+        var userRole = HttpContext.Session.GetString("UserRole");
+
+        if (string.IsNullOrEmpty(userId) || userRole != "Customer")
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        var userName = HttpContext.Session.GetString("UserName");
+        ViewBag.UserName = userName;
+        ViewBag.UserRole = userRole;
+
+        return View("~/Views/Customer/MyBookings.cshtml");
+    }
+
     public async Task<IActionResult> Profile()
     {
         var userId = HttpContext.Session.GetString("UserId");

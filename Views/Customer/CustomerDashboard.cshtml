@@ -131,7 +131,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="#my-bookings">
+                        <a class="nav-link text-white" href="@Url.Action("MyBookings", "Home")">
                             <i class="fas fa-calendar-check me-2"></i>My Bookings
                         </a>
                     </li>
@@ -464,7 +464,7 @@
         }
 
         function viewMyBookings() {
-            alert('My Bookings feature will be implemented soon!');
+            window.location.href = '@Url.Action("MyBookings", "Home")';
         }
 
         function viewRentalHistory() {
