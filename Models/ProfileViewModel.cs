@@ -64,5 +64,17 @@ namespace CarRentalManagementSystem.Models
 
         [Display(Name = "Full Name")]
         public string FullName => $"{FirstName} {LastName}";
+
+        // Profile completion status
+        public bool IsProfileComplete => IsDrivingInfoComplete && IsDocumentsComplete;
+        
+        public bool IsDrivingInfoComplete => 
+            !string.IsNullOrEmpty(LicenseNumber) && 
+            DrivingExperienceYears.HasValue && 
+            !string.IsNullOrEmpty(PreferredCarType);
+        
+        public bool IsDocumentsComplete => 
+            !string.IsNullOrEmpty(DrivingLicenseImageUrl) && 
+            !string.IsNullOrEmpty(NidImageUrl);
     }
 }

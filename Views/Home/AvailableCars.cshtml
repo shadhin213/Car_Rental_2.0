@@ -482,6 +482,51 @@
     </div>
 </div>
 
+<!-- Profile Completion Modal -->
+<div class="modal fade" id="profileCompletionModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title">
+                    <i class="bi bi-person-check"></i> Complete Your Profile
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <div class="mb-4">
+                    <i class="bi bi-person-x text-info" style="font-size: 4rem;"></i>
+                </div>
+                <h4 class="text-dark mb-3">Profile Incomplete</h4>
+                <p class="text-muted mb-4" id="profileCompletionMessage">
+                    Please complete your profile to rent a car. Complete Driving Information and Documents & Images sections.
+                </p>
+                <div class="alert alert-warning text-start">
+                    <h6><i class="bi bi-exclamation-triangle"></i> Required Information:</h6>
+                    <ul class="mb-0" id="missingInfoList">
+                        <li>License Number</li>
+                        <li>Driving Experience (Years)</li>
+                        <li>Preferred Car Type</li>
+                        <li>Driving License Image</li>
+                        <li>National ID Image</li>
+                    </ul>
+                </div>
+                <div class="row g-3">
+                    <div class="col-6">
+                        <a href="@Url.Action("Profile", "Home")" class="btn btn-primary w-100">
+                            <i class="bi bi-person-gear"></i> Complete Profile
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <button type="button" class="btn btn-secondary w-100" data-bs-dismiss="modal">
+                            <i class="bi bi-x-circle"></i> Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Styles {
     <style>
         .status-badge {
@@ -853,6 +898,31 @@
             modal.show();
         }
         
+        function showProfileCompletionModal(response) {
+            // Update the message
+            document.getElementById('profileCompletionMessage').textContent = response.message;
+            
+            // Update the missing info list based on what's incomplete
+            const missingInfoList = document.getElementById('missingInfoList');
+            missingInfoList.innerHTML = '';
+            
+            if (!response.isDrivingInfoComplete) {
+                missingInfoList.innerHTML += '<li><strong>Driving Information:</strong></li>';
+                missingInfoList.innerHTML += '<li>• License Number</li>';
+                missingInfoList.innerHTML += '<li>• Driving Experience (Years)</li>';
+                missingInfoList.innerHTML += '<li>• Preferred Car Type</li>';
+            }
+            
+            if (!response.isDocumentsComplete) {
+                missingInfoList.innerHTML += '<li><strong>Documents & Images:</strong></li>';
+                missingInfoList.innerHTML += '<li>• Driving License Image</li>';
+                missingInfoList.innerHTML += '<li>• National ID Image</li>';
+            }
+            
+            const modal = new bootstrap.Modal(document.getElementById('profileCompletionModal'));
+            modal.show();
+        }
+        
         // Rental Modal Functions
         function openRentalModal(vehicleId) {
             // Check if user is logged in
@@ -861,6 +931,34 @@
                 return;
             }
             
+            // Check profile completion before allowing rental
+            checkProfileCompletion(vehicleId);
+        }
+        
+        function checkProfileCompletion(vehicleId) {
+            $.ajax({
+                url: '@Url.Action("CheckProfileCompletion", "Home")',
+                type: 'GET',
+                success: function(response) {
+                    if (response.success) {
+                        if (response.isProfileComplete) {
+                            // Profile is complete, proceed with rental modal
+                            openRentalModalInternal(vehicleId);
+                        } else {
+                            // Profile is incomplete, show completion message
+                            showProfileCompletionModal(response);
+                        }
+                    } else {
+                        alert('Error checking profile: ' + response.message);
+                    }
+                },
+                error: function() {
+                    alert('An error occurred while checking your profile.');
+                }
+            });
+        }
+        
+        function openRentalModalInternal(vehicleId) {
             currentVehicleId = vehicleId;
             
             // Find vehicle data from the current page

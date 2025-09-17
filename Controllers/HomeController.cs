@@ -809,6 +809,65 @@ public class HomeController : Controller
         }
     }
 
+    [HttpGet]
+    public async Task<IActionResult> CheckProfileCompletion()
+    {
+        var userId = HttpContext.Session.GetString("UserId");
+        var userRole = HttpContext.Session.GetString("UserRole");
+        
+        if (string.IsNullOrEmpty(userId) || userRole != "Customer")
+        {
+            return Json(new { success = false, message = "Unauthorized access" });
+        }
+
+        try
+        {
+            if (_context == null)
+            {
+                return Json(new { success = false, message = "Database context not available" });
+            }
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == int.Parse(userId));
+            if (user == null)
+            {
+                return Json(new { success = false, message = "User not found" });
+            }
+
+            var profileViewModel = new ProfileViewModel
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                Address = user.Address,
+                ProfileImageUrl = user.ProfileImageUrl,
+                PreferredCarType = user.PreferredCarType,
+                DrivingLicenseImageUrl = user.DrivingLicenseImageUrl,
+                NidImageUrl = user.NidImageUrl,
+                CarNumber = user.CarNumber,
+                DrivingExperienceYears = user.DrivingExperienceYears,
+                LicenseNumber = user.LicenseNumber,
+                CreatedAt = user.CreatedAt
+            };
+
+            return Json(new { 
+                success = true, 
+                isProfileComplete = profileViewModel.IsProfileComplete,
+                isDrivingInfoComplete = profileViewModel.IsDrivingInfoComplete,
+                isDocumentsComplete = profileViewModel.IsDocumentsComplete,
+                message = profileViewModel.IsProfileComplete ? 
+                    "Profile is complete. You can proceed with car rental." : 
+                    "Please complete your profile to rent a car. Complete Driving Information and Documents & Images sections."
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error checking profile completion");
+            return Json(new { success = false, message = "Error checking profile completion: " + ex.Message });
+        }
+    }
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
