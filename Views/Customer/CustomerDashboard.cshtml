@@ -146,8 +146,8 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="#support">
-                            <i class="fas fa-headset me-2"></i>Support
+                        <a class="nav-link text-white" href="#" data-bs-toggle="modal" data-bs-target="#complainModal">
+                            <i class="fas fa-exclamation-circle me-2"></i>Complain
                         </a>
                     </li>
                 </ul>
@@ -324,11 +324,60 @@
     </div>
 </div>
 
+<!-- Complain Modal -->
+<div class="modal fade" id="complainModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title"><i class="fas fa-exclamation-circle me-2"></i>Submit a Complaint</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="complainForm">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="complainSubject" class="form-label">Subject <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="complainSubject" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="complainCategory" class="form-label">Category <span class="text-danger">*</span></label>
+                            <select id="complainCategory" class="form-select" required>
+                                <option value="">Select a category</option>
+                                <option>Vehicle Issue</option>
+                                <option>Booking Problem</option>
+                                <option>Payment/Billing</option>
+                                <option>Staff Behavior</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label for="complainMessage" class="form-label">Message <span class="text-danger">*</span></label>
+                            <textarea id="complainMessage" class="form-control" rows="5" placeholder="Describe your issue in detail" required></textarea>
+                        </div>
+                        <div class="col-12">
+                            <label for="complainAttachment" class="form-label">Attachment (optional)</label>
+                            <input type="file" id="complainAttachment" class="form-control" accept="image/*,.pdf,.doc,.docx">
+                            <small class="text-muted">You can attach screenshots or documents to help us understand the issue.</small>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="submitComplainBtn">
+                    <i class="fas fa-paper-plane me-1"></i> Submit Complaint
+                </button>
+            </div>
+        </div>
+    </div>
+    </div>
+
 @section Scripts {
     <script>
         $(document).ready(function() {
             loadCustomerDashboardData();
             initializeSidebar();
+            initializeComplainBox();
         });
 
         function initializeSidebar() {
@@ -473,6 +522,29 @@
 
         function contactSupport() {
             alert('Support contact feature will be implemented soon!');
+        }
+
+        function initializeComplainBox() {
+            // Handle submit button click
+            $('#submitComplainBtn').on('click', function () {
+                const subject = $('#complainSubject').val().trim();
+                const category = $('#complainCategory').val();
+                const message = $('#complainMessage').val().trim();
+
+                if (!subject || !category || !message) {
+                    alert('Please fill in Subject, Category, and Message.');
+                    return;
+                }
+
+                // Placeholder submission: Show success and reset form
+                alert('Your complaint has been submitted. Our team will contact you shortly.');
+                $('#complainForm')[0].reset();
+
+                // Close modal (Bootstrap 5)
+                const modalEl = document.getElementById('complainModal');
+                const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+                modal.hide();
+            });
         }
     </script>
 }
