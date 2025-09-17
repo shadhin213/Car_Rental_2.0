@@ -414,7 +414,7 @@ public class HomeController : Controller
             if (_context == null)
             {
                 ViewBag.Vehicles = new List<VehicleViewModel>();
-                return View("~/Views/Customer/AvailableCars.cshtml");
+                return View("~/Views/Home/AvailableCars.cshtml");
             }
 
             // Show ALL vehicles regardless of status, but order by status (Available first) then by creation date
@@ -444,13 +444,13 @@ public class HomeController : Controller
             }).ToList();
 
             ViewBag.Vehicles = vehicleViewModels;
-            return View("~/Views/Customer/AvailableCars.cshtml");
+            return View("~/Views/Home/AvailableCars.cshtml");
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error retrieving vehicles");
             ViewBag.Vehicles = new List<VehicleViewModel>();
-            return View("~/Views/Customer/AvailableCars.cshtml");
+            return View("~/Views/Home/AvailableCars.cshtml");
         }
     }
 
