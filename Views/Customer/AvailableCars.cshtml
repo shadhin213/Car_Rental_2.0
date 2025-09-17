@@ -14,9 +14,21 @@
                         <p class="lead">Browse our complete fleet of vehicles with their current status</p>
                     </div>
                     <div>
-                        <a href="@Url.Action("FleetManagement", "Home")" class="btn btn-outline-light btn-lg">
-                            <i class="bi bi-truck"></i> Fleet Management
-                        </a>
+                        @{
+                            var role = Context.Session.GetString("UserRole");
+                        }
+                        @if (string.Equals(role, "Customer", StringComparison.OrdinalIgnoreCase))
+                        {
+                            <a href="@Url.Action("CustomerDashboard", "Home")" class="btn btn-outline-light btn-lg">
+                                <i class="bi bi-arrow-left"></i> Back to Dashboard
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("FleetManagement", "Home")" class="btn btn-outline-light btn-lg">
+                                <i class="bi bi-truck"></i> Fleet Management
+                            </a>
+                        }
                     </div>
                 </div>
             </div>
