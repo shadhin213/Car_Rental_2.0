@@ -19476,6 +19476,11 @@
       "FileKind": "mvc"
     },
     {
+      "FilePath": "f:\\Versity_pro\\Car_Rental_2.0\\Views\\Customer\\RentalHistory.cshtml",
+      "TargetPath": "Views\\Customer\\RentalHistory.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "f:\\Versity_pro\\Car_Rental_2.0\\Views\\Account\\Login.cshtml",
       "TargetPath": "Views\\Account\\Login.cshtml",
       "FileKind": "mvc"
