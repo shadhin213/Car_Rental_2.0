@@ -23,12 +23,7 @@
                                 <i class="bi bi-arrow-left"></i> Back to Dashboard
                             </a>
                         }
-                        else
-                        {
-                            <a href="@Url.Action("FleetManagement", "Home")" class="btn btn-outline-light btn-lg">
-                                <i class="bi bi-truck"></i> Fleet Management
-                            </a>
-                        }
+                        @* For non-customers, no button is shown (Fleet Management hidden) *@
                     </div>
                 </div>
             </div>
