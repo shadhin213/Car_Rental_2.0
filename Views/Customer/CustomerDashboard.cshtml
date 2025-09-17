@@ -127,7 +127,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="@Url.Action("AvailableCars", "Home")">
-                            <i class="fas fa-car me-2"></i>Browse Cars
+                            <i class="fas fa-car me-2"></i>Booking Cars
                         </a>
                     </li>
                     <li class="nav-item">
@@ -140,14 +140,15 @@
                             <i class="fas fa-history me-2"></i>Rental History
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white " href="@Url.Action("Profile", "Home")">
-                            <i class="fas fa-user me-2"></i>My Profile
-                        </a>
-                    </li>
+                    
                     <li class="nav-item">
                         <a class="nav-link text-white" href="#" data-bs-toggle="modal" data-bs-target="#complainModal">
                             <i class="fas fa-exclamation-circle me-2"></i>Complain
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white " href="@Url.Action("Profile", "Home")">
+                            <i class="fas fa-user me-2"></i>My Profile
                         </a>
                     </li>
                 </ul>
@@ -184,7 +185,7 @@
                 <h4 class="alert-heading">Welcome to your dashboard!</h4>
                 <p>Here you can browse available vehicles, manage your bookings, and track your rental history.</p>
                 <hr>
-                <p class="mb-0">Need help? Contact our support team anytime.</p>
+                
             </div>
 
             <!-- Statistics Cards -->
@@ -301,7 +302,7 @@
                         <div class="card-body">
                             <div class="d-grid gap-2">
                                 <a href="@Url.Action("AvailableCars", "Home")" class="btn btn-primary">
-                                    <i class="fas fa-search me-2"></i>Browse Available Cars
+                                    <i class="fas fa-search me-2"></i>Booking Available Cars
                                 </a>
                                 <button class="btn btn-info" onclick="viewMyBookings()">
                                     <i class="fas fa-calendar-check me-2"></i>View My Bookings
